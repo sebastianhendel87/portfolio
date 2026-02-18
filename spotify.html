@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spotify — Sebastian Hendel</title>
+  <style>
+    @font-face {
+      font-family: 'Monument Grotesk';
+      src: url('fonts/MonumentGrotesk.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Monument Grotesk';
+      src: url('fonts/MonumentGrotesk-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --text: #f5f5f5;
+      --text-strong: #fff;
+      --muted: #888;
+      --muted-hover: #b0b0b0;
+      --border: #222;
+      --surface: #1a1a1a;
+    }
+    body.light {
+      --bg: #e8e6e4;
+      --text: #1a1a1a;
+      --text-strong: #0a0a0a;
+      --muted: #555;
+      --muted-hover: #333;
+      --border: #d2d0cd;
+      --surface: #dddcd9;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Monument Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { opacity: 0.85; }
+
+    /* Nav */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg);
+    }
+    .navbar .name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-strong);
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .nav-links a {
+      color: var(--text);
+      position: relative;
+      transition: color 0.2s ease;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      background: currentColor;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--muted-hover); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Project Header */
+    .project-header {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      position: relative;
+    }
+    .project-header h1 {
+      font-size: clamp(64px, 12vw, 140px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin: 0;
+      margin-top: 120px;
+      color: var(--text-strong);
+    }
+    .project-meta {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(calc(-50% + 120px));
+      display: flex;
+      gap: 40px;
+    }
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .project-meta-label {
+      font-size: 14px;
+      color: var(--text-strong);
+      font-weight: 500;
+    }
+    .project-meta-value {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Content sections */
+    .project-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px 120px;
+    }
+
+    /* Image containers */
+    .project-image {
+      width: 100%;
+      margin: 0 0 80px 0;
+      border-radius: 0;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .project-image:last-child {
+      margin-bottom: 0;
+    }
+    .project-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .project-image-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .project-image.hero {
+      aspect-ratio: 16/10;
+    }
+    .project-image.full {
+      aspect-ratio: 21/9;
+    }
+
+    /* Two column layout for some sections */
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 0 0 80px 0;
+    }
+    .two-column .project-image {
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      .two-column {
+        grid-template-columns: 1fr;
+        gap: 80px;
+      }
+    }
+
+    /* Footer navigation */
+    .project-footer {
+      padding: 120px 40px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .next-project {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .next-project-link {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--text-strong);
+      transition: color 0.2s ease;
+    }
+    .next-project-link:hover {
+      color: var(--muted-hover);
+    }
+
+    footer {
+      padding: 48px 40px;
+      font-size: 14px;
+      opacity: 0.6;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    footer a { text-decoration: underline; text-underline-offset: 4px; }
+  </style>
+</head>
+<body class="light">
+
+  <nav class="navbar">
+    <a href="index.html" class="name">Sebastian Hendel</a>
+    <div class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="work.html">Works</a>
+    </div>
+  </nav>
+
+  <header class="project-header">
+    <h1>Spotify</h1>
+    <div class="project-meta">
+      <div class="project-meta-item">
+        <span class="project-meta-label">Project</span>
+        <span class="project-meta-value">Secondary Layer Tool</span>
+        <span class="project-meta-value">2021</span>
+      </div>
+      <div class="project-meta-item">
+        <span class="project-meta-label">Role</span>
+        <span class="project-meta-value">Project Manager</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="project-content">
+
+    <div class="project-image hero">
+      <div class="project-image-placeholder">Hero image</div>
+    </div>
+
+    <div class="two-column">
+      <div class="project-image">
+        <div class="project-image-placeholder">Project detail 1</div>
+      </div>
+      <div class="project-image">
+        <div class="project-image-placeholder">Project detail 2</div>
+      </div>
+    </div>
+
+    <div class="project-image full">
+      <div class="project-image-placeholder">Full-width showcase</div>
+    </div>
+
+    <div class="project-image">
+      <div class="project-image-placeholder">Feature screenshot</div>
+    </div>
+
+    <div class="two-column">
+      <div class="project-image">
+        <div class="project-image-placeholder">Detail 3</div>
+      </div>
+      <div class="project-image">
+        <div class="project-image-placeholder">Detail 4</div>
+      </div>
+    </div>
+
+    <div class="project-image">
+      <div class="project-image-placeholder">Final showcase</div>
+    </div>
+
+  </main>
+
+  <div class="project-footer">
+    <span class="next-project">Next Project</span><br>
+    <a href="carbo-culture.html" class="next-project-link">Carbo Culture →</a>
+  </div>
+
+  <footer>
+    <span>© 2026 Sebastian Hendel</span>
+    <a href="mailto:sebastianhendel@gmail.com">Contact</a>
+  </footer>
+
+</body>
+</html>

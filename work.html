@@ -94,37 +94,47 @@
     .nav-links a.active { color: var(--muted); }
 
     .work-list {
-      padding: 120px 40px 80px;
+      padding: 120px 220px 80px 80px;
       max-width: 1400px;
-      margin: 0 auto;
+      margin: 0 0 0 auto;
+      text-align: right;
     }
 
     .work-item {
       display: block;
-      padding: 48px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
       transition: color 0.2s ease, opacity 0.2s ease;
     }
     .work-item:hover {
       color: var(--muted-hover);
     }
-    .work-item:last-child {
-      border-bottom: none;
-    }
 
     .work-item__title {
-      font-size: clamp(48px, 10vw, 120px);
+      font-size: clamp(56px, 14vw, 160px);
       font-weight: 600;
       letter-spacing: -0.04em;
-      line-height: 0.95;
+      line-height: 0.9;
       margin: 0;
     }
-    .work-item__meta {
-      font-size: clamp(14px, 1.5vw, 18px);
+
+    /* Hover: proyecto + año abajo a la izquierda (como contacto en home) */
+    .work-hover-info {
+      position: fixed;
+      bottom: 32px;
+      left: 32px;
+      z-index: 50;
+      font-size: 14px;
+      line-height: 1.45;
       color: var(--muted);
-      margin-top: 12px;
-      letter-spacing: 0.02em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
     }
+    .work-hover-info.is-visible {
+      opacity: 1;
+    }
+    .work-hover-info__project { font-weight: 600; color: var(--text-strong); }
+    .work-hover-info__year { color: var(--muted); }
   </style>
 </head>
 <body class="light">
@@ -137,32 +147,45 @@
     </div>
   </nav>
 
+  <div class="work-hover-info" id="work-hover-info" aria-hidden="true">
+    <span class="work-hover-info__project" id="work-hover-project"></span><span class="work-hover-info__year" id="work-hover-year"></span>
+  </div>
+
   <main class="work-list">
-    <a href="#" class="work-item">
-      <h2 class="work-item__title">Brand identity & strategy</h2>
-      <p class="work-item__meta">Client name · Year</p>
+    <a href="spotify.html" class="work-item" data-project="Secondary Layer Tool" data-year="2021">
+      <h2 class="work-item__title">Spotify</h2>
     </a>
-    <a href="#" class="work-item">
-      <h2 class="work-item__title">Digital campaign</h2>
-      <p class="work-item__meta">Client name · Year</p>
+    <a href="carbo-culture.html" class="work-item" data-project="Visual Identity + Website design" data-year="2023">
+      <h2 class="work-item__title">Carbo Culture</h2>
     </a>
-    <a href="#" class="work-item">
-      <h2 class="work-item__title">Website & experience</h2>
-      <p class="work-item__meta">Client name · Year</p>
+    <a href="tonscan.html" class="work-item" data-project="Blockchain Explorer" data-year="2024">
+      <h2 class="work-item__title">Tonscan</h2>
     </a>
-    <a href="#" class="work-item">
-      <h2 class="work-item__title">Content & production</h2>
-      <p class="work-item__meta">Client name · Year</p>
-    </a>
-    <a href="#" class="work-item">
-      <h2 class="work-item__title">Naming & verbal identity</h2>
-      <p class="work-item__meta">Client name · Year</p>
-    </a>
-    <a href="#" class="work-item">
-      <h2 class="work-item__title">Motion & film</h2>
-      <p class="work-item__meta">Client name · Year</p>
+    <a href="dune.html" class="work-item" data-project="Visual Identity + Website design" data-year="2025">
+      <h2 class="work-item__title">Dune</h2>
     </a>
   </main>
 
+  <script>
+    (function () {
+      var hoverInfo = document.getElementById('work-hover-info');
+      var hoverProject = document.getElementById('work-hover-project');
+      var hoverYear = document.getElementById('work-hover-year');
+      var items = document.querySelectorAll('.work-item');
+      if (!hoverInfo || !hoverProject || !hoverYear) return;
+      items.forEach(function (el) {
+        el.addEventListener('mouseenter', function () {
+          hoverProject.textContent = el.getAttribute('data-project') + ', ';
+          hoverYear.textContent = el.getAttribute('data-year');
+          hoverInfo.classList.add('is-visible');
+          hoverInfo.setAttribute('aria-hidden', 'false');
+        });
+        el.addEventListener('mouseleave', function () {
+          hoverInfo.classList.remove('is-visible');
+          hoverInfo.setAttribute('aria-hidden', 'true');
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
