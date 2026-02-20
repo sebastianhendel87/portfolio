@@ -135,6 +135,36 @@
     }
     .work-hover-info__project { font-weight: 600; color: var(--text-strong); }
     .work-hover-info__year { color: var(--muted); }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 20px 20px;
+      }
+      .navbar .name {
+        font-size: 16px;
+      }
+      .nav-links {
+        gap: 20px;
+        font-size: 16px;
+      }
+      .work-list {
+        padding: 100px 20px 60px 20px;
+        text-align: left;
+      }
+      .work-item {
+        padding: 16px 0;
+      }
+      .work-item__title {
+        font-size: clamp(40px, 12vw, 80px);
+      }
+      .work-hover-info {
+        position: static;
+        opacity: 1;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+    }
   </style>
 </head>
 <body class="light">

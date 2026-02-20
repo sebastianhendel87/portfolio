@@ -203,6 +203,51 @@
       gap: 24px;
     }
     footer a { text-decoration: underline; text-underline-offset: 4px; }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 20px 20px;
+      }
+      .navbar .name {
+        font-size: 16px;
+      }
+      .nav-links {
+        gap: 20px;
+        font-size: 16px;
+      }
+      .hero {
+        padding: 0 20px;
+        min-height: 100vh;
+      }
+      .hero .hero-copy {
+        font-size: clamp(24px, 6vw, 32px);
+        line-height: 1.4;
+      }
+      .hero-contact {
+        bottom: 20px;
+        left: 20px;
+        font-size: 13px;
+      }
+      .hero-contact h3 {
+        font-size: 13px;
+      }
+      .hero-contact .contact-item {
+        font-size: 13px;
+      }
+      .container {
+        padding: 0 20px;
+      }
+      section {
+        padding: 60px 20px;
+      }
+      section p {
+        font-size: 18px;
+      }
+      footer {
+        padding: 40px 20px;
+      }
+    }
   </style>
 </head>
 <body class="light">
