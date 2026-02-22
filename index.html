@@ -26,7 +26,7 @@
       --bg: #0a0a0a;
       --text: #f5f5f5;
       --text-strong: #fff;
-      --muted: #888;
+      --muted: #999;
       --muted-hover: #b0b0b0;
       --surface: #1a1a1a;
       --surface-text: #666;
@@ -36,7 +36,7 @@
       --bg: #e8e6e4;
       --text: #1a1a1a;
       --text-strong: #0a0a0a;
-      --muted: #555;
+      --muted: #666;
       --muted-hover: #333;
       --surface: #dddcd9;
       --surface-text: #555;
@@ -165,7 +165,7 @@
     /* Section */
     section { padding: 80px 32px; }
     #selected-work .container {
-      max-width: 1200px;
+      max-width: 1600px;
     }
     section h2 {
       font-size: 13px;
@@ -176,19 +176,42 @@
     }
     section p { font-size: 20px; max-width: 560px; opacity: 0.9; margin: 0 0 18px; }
 
-    /* Reel / work block — wide pero contenido */
-    #selected-work .reel {
-      background: var(--surface);
+    /* Carousel — fade */
+    #selected-work .carousel {
+      position: relative;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1600px;
       margin: 32px auto;
-      aspect-ratio: 16/9;
       border-radius: 4px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    #selected-work .carousel-track {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+    }
+    #selected-work .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--surface-text);
-      font-size: 15px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+    }
+    #selected-work .carousel-slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+    #selected-work .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     /* Footer */
@@ -274,7 +297,13 @@
   <section id="selected-work">
     <div class="container">
       <h2>Selected work</h2>
-      <div class="reel">Work reel / projects</div>
+      <div class="carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide active"><img src="Frame%204.png" alt="Work 1"></div>
+          <div class="carousel-slide"><img src="Screen%20Shot%202022-04-10%20at%206.01.23%20PM%201.png" alt="Work 2"></div>
+          <div class="carousel-slide"><img src="slide-5%202.png" alt="Work 3"></div>
+        </div>
+      </div>
       <p><a href="work.html">Explore work →</a></p>
     </div>
   </section>
@@ -293,6 +322,19 @@
       <a href="mailto:sebastianhendel@gmail.com">Contact</a>
     </div>
   </footer>
+
+  <script>
+    (function() {
+      var slides = document.querySelectorAll('#selected-work .carousel-slide');
+      var total = slides.length;
+      var current = 0;
+      setInterval(function() {
+        slides[current].classList.remove('active');
+        current = (current + 1) % total;
+        slides[current].classList.add('active');
+      }, 3000);
+    })();
+  </script>
 
 </body>
 </html>

@@ -24,7 +24,7 @@
       --bg: #0a0a0a;
       --text: #f5f5f5;
       --text-strong: #fff;
-      --muted: #888;
+      --muted: #999;
       --muted-hover: #b0b0b0;
       --border: #222;
       --surface: #1a1a1a;
@@ -33,7 +33,7 @@
       --bg: #e8e6e4;
       --text: #1a1a1a;
       --text-strong: #0a0a0a;
-      --muted: #555;
+      --muted: #666;
       --muted-hover: #333;
       --border: #d2d0cd;
       --surface: #dddcd9;
@@ -177,6 +177,75 @@
       aspect-ratio: 21/9;
     }
 
+    /* Project info module */
+    .project-info-module {
+      display: grid;
+      grid-template-columns: minmax(0, 260px) 1fr;
+      gap: 60px 80px;
+      margin-bottom: 80px;
+      align-items: start;
+    }
+    .project-info-left {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-width: 260px;
+    }
+    .project-info-meta-row {
+      display: flex;
+      gap: 48px;
+    }
+    .project-info-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .project-info-meta-item .label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-strong);
+    }
+    .project-info-meta-item .value {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 110px;
+    }
+    .project-info-spacer {
+      min-height: 5em;
+    }
+    .project-info-right {
+      justify-self: end;
+      width: 620px;
+      margin-right: 32px;
+    }
+    .project-info-right h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin: 0 0 24px;
+      color: var(--text-strong);
+    }
+    .project-info-right p {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+      margin: 0 0 16px;
+      color: var(--text-strong);
+    }
+    .project-info-right p:last-child {
+      margin-bottom: 0;
+    }
+    @media (max-width: 768px) {
+      .project-info-module {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        margin-bottom: 60px;
+      }
+    }
+
     /* Two column layout for some sections */
     .two-column {
       display: grid;
@@ -309,6 +378,31 @@
 
     <div class="project-image hero">
       <div class="project-image-placeholder">Hero image</div>
+    </div>
+
+    <div class="project-info-module">
+      <div class="project-info-left">
+        <div class="project-info-meta-row">
+          <div class="project-info-meta-item">
+            <span class="label">Project</span>
+            <span class="value">Visual Identity — Website 2023</span>
+          </div>
+          <div class="project-info-meta-item">
+            <span class="label">Work</span>
+            <span class="value">Project management, delivery</span>
+          </div>
+        </div>
+        <div class="project-info-meta-item">
+          <span class="label">Team</span>
+          <span class="value">Design, Engineering, Product</span>
+        </div>
+        <div class="project-info-spacer"></div>
+      </div>
+      <div class="project-info-right">
+        <h2>Lorem ipsum dolor sit amet<br>consectetur adipiscing elit</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
     </div>
 
     <div class="two-column">
