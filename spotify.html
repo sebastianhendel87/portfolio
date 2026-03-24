@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
-  <title>Spotify — Sebastian Hendel</title>
+  <title>Spotify · Sebastian Hendel</title>
   <style>
     @font-face {
       font-family: 'Monument Grotesk';
@@ -247,6 +247,31 @@
     .project-info-right p:last-child {
       margin-bottom: 0;
     }
+    /* Spotify case study: tight block, prose, regular weight */
+    .project-info-module--tight {
+      gap: 48px 80px;
+      margin-bottom: 56px;
+    }
+    .project-info-module--tight .project-info-spacer {
+      min-height: 2em;
+    }
+    .project-info-module--tight .project-info-right h2 {
+      font-size: clamp(26px, 3.5vw, 36px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin: 0 0 24px;
+    }
+    .project-info-module--tight .project-info-right p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin: 0 0 12px;
+      color: var(--text-strong);
+    }
+    .project-info-module--tight .project-info-right p:last-child {
+      margin-bottom: 0;
+    }
     @media (max-width: 768px) {
       .project-info-module {
         grid-template-columns: 1fr;
@@ -389,7 +414,7 @@
       <img src="Spotify/Frame%2018.png" alt="Spotify project hero">
     </div>
 
-    <div class="project-info-module">
+    <div class="project-info-module project-info-module--tight">
       <div class="project-info-left">
         <div class="project-info-meta-row">
           <div class="project-info-meta-item">
@@ -409,8 +434,9 @@
       </div>
       <div class="project-info-right">
         <h2>Helping Spotify scale internal tools<br>for cross-team collaboration</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>The brief was to build an internal tool that could generate bespoke secondary-layer assets from each content photo, tailored to the image, not a one-size-fits-all overlay.</p>
+        <p>It had to be sexy and functional: strong visually, straightforward to use, and self-explanatory for third parties and vendors so handoffs stayed simple.</p>
+        <p>We started from wireframes and a light direction (explore a few gradients, try a pattern) and iterated into something shippable. The result was a polished, practical product, delivered on time.</p>
       </div>
     </div>
 
