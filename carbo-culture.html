@@ -96,7 +96,7 @@
     .nav-links a:hover { color: var(--muted-hover); }
     .nav-links a:hover::after { width: 100%; }
 
-    /* Project Header */
+    /* Project Header — same layout as spotify.html */
     .project-header {
       min-height: 70vh;
       display: flex;
@@ -121,6 +121,38 @@
       display: flex;
       gap: 40px;
     }
+
+    /* Hero video — same box as Spotify .project-image.hero (16/10), video fills with cover */
+    .project-image.hero.hero--video {
+      position: relative;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+    .project-image.hero.hero--video video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Vídeos fuera del hero: caja fija + cover (evita bandas grises / negros rotos) */
+    .project-image.project-image--embed {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+    .project-image.project-image--embed video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
     .project-meta-item {
       display: flex;
       flex-direction: column;
@@ -138,7 +170,7 @@
       font-weight: 400;
     }
 
-    /* Content sections */
+    /* Content sections — same as spotify.html */
     .project-content {
       max-width: 1400px;
       margin: 0 auto;
@@ -156,10 +188,15 @@
     .project-image:last-child {
       margin-bottom: 0;
     }
-    .project-image img {
+    .project-image img,
+    .project-image video {
       width: 100%;
       height: auto;
       display: block;
+    }
+    .project-image.full:has(img),
+    .project-image.full:has(video) {
+      aspect-ratio: auto;
     }
     .project-image-placeholder {
       width: 100%;
@@ -181,26 +218,29 @@
     /* Project info module */
     .project-info-module {
       display: grid;
-      grid-template-columns: minmax(0, 260px) 1fr;
-      gap: 60px 80px;
-      margin-bottom: 80px;
+      grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+      gap: 40px 56px;
+      margin-bottom: 56px;
       align-items: start;
     }
     .project-info-left {
       display: flex;
       flex-direction: column;
-      gap: 32px;
-      max-width: 260px;
+      gap: 28px;
+      max-width: 280px;
+      min-width: 0;
     }
     .project-info-meta-row {
       display: flex;
-      gap: 48px;
+      flex-wrap: wrap;
+      gap: 28px 40px;
     }
     .project-info-meta-item {
       display: flex;
       flex-direction: column;
       gap: 6px;
       text-align: left;
+      min-width: 0;
     }
     .project-info-meta-item .label {
       font-size: 14px;
@@ -211,15 +251,16 @@
       font-size: 14px;
       font-weight: 400;
       color: var(--muted);
-      max-width: 110px;
-    }
-    .project-info-spacer {
-      min-height: 5em;
+      line-height: 1.45;
+      max-width: none;
     }
     .project-info-right {
-      justify-self: end;
-      width: 620px;
-      margin-right: 32px;
+      justify-self: stretch;
+      width: 100%;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: 0;
+      min-width: 0;
     }
     .project-info-right h2 {
       font-size: clamp(28px, 4vw, 40px);
@@ -239,15 +280,23 @@
     .project-info-right p:last-child {
       margin-bottom: 0;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .project-info-module {
         grid-template-columns: 1fr;
-        gap: 40px;
-        margin-bottom: 60px;
+        gap: 32px;
+      }
+      .project-info-right {
+        margin-left: 0;
+        max-width: none;
+      }
+    }
+    @media (max-width: 768px) {
+      .project-info-module {
+        margin-bottom: 48px;
       }
     }
 
-    /* Two column layout for some sections */
+    /* Two column layout for some sections — same rhythm as spotify.html */
     .two-column {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -256,6 +305,7 @@
     }
     .two-column .project-image {
       margin: 0;
+      background: #0a0a0a;
     }
     @media (max-width: 768px) {
       .two-column {
@@ -263,8 +313,36 @@
         gap: 80px;
       }
     }
+    .two-column .project-image img,
+    .two-column .project-image video {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: bottom;
+    }
+    .two-column .project-image.project-image--embed video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .two-column .project-image:has(video) {
+      position: relative;
+      z-index: 1;
+    }
+    .project-image--tail {
+      background: #0a0a0a;
+    }
+    .project-image--tail img,
+    .project-image--tail video {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: bottom;
+    }
 
-    /* Footer navigation */
     .project-footer {
       padding: 120px 40px 80px;
       max-width: 1400px;
@@ -303,7 +381,7 @@
     }
     footer a { text-decoration: underline; text-underline-offset: 4px; }
 
-    /* Mobile optimizations */
+    /* Mobile optimizations — same header + content as spotify.html */
     @media (max-width: 768px) {
       .navbar {
         padding: 20px 20px;
@@ -376,9 +454,15 @@
   </header>
 
   <main class="project-content">
+    <!--
+      Videos Carbo (carpeta carbo-culture/):
+      1) Hero: logo-bw.mp4
+      2) Full-width: live_action_nature.mp4
+      3) Grilla con 02.png: live_action.mp4
+    -->
 
-    <div class="project-image hero">
-      <div class="project-image-placeholder">Hero image</div>
+    <div id="carbo-hero-video" class="project-image hero hero--video">
+      <video src="carbo-culture/logo-bw.mp4" autoplay muted loop playsinline preload="auto"></video>
     </div>
 
     <div class="project-info-module">
@@ -397,7 +481,6 @@
           <span class="label">Team</span>
           <span class="value">Design, Engineering, Product</span>
         </div>
-        <div class="project-info-spacer"></div>
       </div>
       <div class="project-info-right">
         <h2>Lorem ipsum dolor sit amet<br>consectetur adipiscing elit</h2>
@@ -408,32 +491,37 @@
 
     <div class="two-column">
       <div class="project-image">
-        <div class="project-image-placeholder">Project detail 1</div>
+        <img src="carbo-culture/web-screens.png" alt="Carbo Culture web screens">
       </div>
       <div class="project-image">
-        <div class="project-image-placeholder">Project detail 2</div>
+        <img src="carbo-culture/phone-screens.png" alt="Carbo Culture phone screens">
       </div>
     </div>
 
-    <div class="project-image full">
-      <div class="project-image-placeholder">Full-width showcase</div>
-    </div>
-
-    <div class="project-image">
-      <div class="project-image-placeholder">Feature screenshot</div>
+    <!-- VIDEO: live action / naturaleza (full width) -->
+    <div id="carbo-video-nature" class="project-image project-image--embed">
+      <video
+        src="carbo-culture/live_action_nature.mp4"
+        autoplay muted loop playsinline
+        preload="auto"
+        aria-label="Carbo Culture — live action (nature)"></video>
     </div>
 
     <div class="two-column">
       <div class="project-image">
-        <div class="project-image-placeholder">Detail 3</div>
+        <img src="carbo-culture/02.png" alt="Carbo Culture identity">
       </div>
-      <div class="project-image">
-        <div class="project-image-placeholder">Detail 4</div>
+      <div id="carbo-video-live-action" class="project-image project-image--embed">
+        <video
+          src="carbo-culture/live_action.mp4"
+          autoplay muted loop playsinline
+          preload="auto"
+          aria-label="Carbo Culture — live action"></video>
       </div>
     </div>
 
-    <div class="project-image">
-      <div class="project-image-placeholder">Final showcase</div>
+    <div class="project-image project-image--tail">
+      <img src="carbo-culture/post-01.png" alt="Carbo Culture campaign">
     </div>
 
   </main>

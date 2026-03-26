@@ -98,10 +98,10 @@
 
     /* Project Header */
     .project-header {
-      min-height: 70vh;
+      min-height: 0;
       display: flex;
-      align-items: center;
-      padding: 0 40px;
+      align-items: flex-start;
+      padding: 96px 40px 28px;
       position: relative;
     }
     .project-header h1 {
@@ -110,14 +110,14 @@
       letter-spacing: -0.04em;
       line-height: 1;
       margin: 0;
-      margin-top: 120px;
+      margin-top: 0;
       color: var(--text-strong);
     }
     .project-meta {
       position: absolute;
       right: 40px;
-      top: 50%;
-      transform: translateY(calc(-50% + 120px));
+      top: 96px;
+      transform: none;
       display: flex;
       gap: 40px;
     }
@@ -142,13 +142,13 @@
     .project-content {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 40px 120px;
+      padding: 0 40px 96px;
     }
 
     /* Image containers */
     .project-image {
       width: 100%;
-      margin: 0 0 80px 0;
+      margin: 0 0 56px 0;
       border-radius: 0;
       overflow: hidden;
       background: var(--surface);
@@ -156,10 +156,25 @@
     .project-image:last-child {
       margin-bottom: 0;
     }
-    .project-image img {
+    .project-image img,
+    .project-image video {
       width: 100%;
       height: auto;
       display: block;
+    }
+    .project-image.hero.hero--video {
+      background: #0a0a0a;
+      margin-bottom: 64px;
+    }
+    .project-image.hero.hero--video video {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: bottom;
+    }
+    .project-image.full:has(img),
+    .project-image.full:has(video) {
+      aspect-ratio: auto;
     }
     .project-image-placeholder {
       width: 100%;
@@ -171,7 +186,7 @@
       font-size: 14px;
       font-weight: 400;
     }
-    .project-image.hero {
+    .project-image.hero:not(.hero--video) {
       aspect-ratio: 16/10;
     }
     .project-image.full {
@@ -182,8 +197,8 @@
     .project-info-module {
       display: grid;
       grid-template-columns: minmax(0, 260px) 1fr;
-      gap: 60px 80px;
-      margin-bottom: 80px;
+      gap: 48px 64px;
+      margin-bottom: 56px;
       align-items: start;
     }
     .project-info-left {
@@ -251,8 +266,8 @@
     .two-column {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin: 0 0 80px 0;
+      gap: 32px;
+      margin: 0 0 56px 0;
     }
     .two-column .project-image {
       margin: 0;
@@ -260,13 +275,37 @@
     @media (max-width: 768px) {
       .two-column {
         grid-template-columns: 1fr;
-        gap: 80px;
+        gap: 24px;
       }
     }
 
     /* Footer navigation */
+    .two-column .project-image {
+      background: #0a0a0a;
+    }
+    .two-column .project-image img,
+    .two-column .project-image video {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: bottom;
+    }
+    .two-column .project-image:has(video) {
+      position: relative;
+      z-index: 1;
+    }
+    .project-image--tail {
+      background: #0a0a0a;
+    }
+    .project-image--tail img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: bottom;
+    }
+
     .project-footer {
-      padding: 120px 40px 80px;
+      padding: 80px 40px 72px;
       max-width: 1400px;
       margin: 0 auto;
     }
@@ -317,7 +356,7 @@
       }
       .project-header {
         min-height: auto;
-        padding: 100px 20px 40px;
+        padding: 88px 20px 20px;
         flex-direction: column;
         align-items: flex-start;
       }
@@ -333,13 +372,13 @@
         gap: 24px;
       }
       .project-content {
-        padding: 40px 20px 80px;
+        padding: 24px 20px 72px;
       }
       .two-column {
-        gap: 40px;
+        gap: 32px;
       }
       .project-footer {
-        padding: 80px 20px 60px;
+        padding: 56px 20px 48px;
       }
       .next-project-link {
         font-size: clamp(32px, 8vw, 48px);
@@ -377,8 +416,8 @@
 
   <main class="project-content">
 
-    <div class="project-image hero">
-      <div class="project-image-placeholder">Hero image</div>
+    <div class="project-image hero hero--video">
+      <video src="dune/logo-reveal-dark.mp4" autoplay muted loop playsinline></video>
     </div>
 
     <div class="project-info-module">
@@ -408,32 +447,33 @@
 
     <div class="two-column">
       <div class="project-image">
-        <div class="project-image-placeholder">Project detail 1</div>
+        <video src="dune/seq-01.mp4" autoplay muted loop playsinline></video>
       </div>
       <div class="project-image">
-        <div class="project-image-placeholder">Project detail 2</div>
+        <video src="dune/seq-03.mp4" autoplay muted loop playsinline></video>
       </div>
-    </div>
-
-    <div class="project-image full">
-      <div class="project-image-placeholder">Full-width showcase</div>
-    </div>
-
-    <div class="project-image">
-      <div class="project-image-placeholder">Feature screenshot</div>
     </div>
 
     <div class="two-column">
       <div class="project-image">
-        <div class="project-image-placeholder">Detail 3</div>
+        <img src="dune/seq-02.png" alt="Dune brand direction">
       </div>
       <div class="project-image">
-        <div class="project-image-placeholder">Detail 4</div>
+        <img src="dune/seq-05.png" alt="Dune brand system">
       </div>
     </div>
 
-    <div class="project-image">
-      <div class="project-image-placeholder">Final showcase</div>
+    <div class="two-column">
+      <div class="project-image">
+        <img src="dune/website-sim-landing.png" alt="Dune Sim landing page">
+      </div>
+      <div class="project-image">
+        <img src="dune/website-contact.png" alt="Dune contact page">
+      </div>
+    </div>
+
+    <div class="project-image project-image--tail">
+      <img src="dune/website-text-image.png" alt="Dune website layout">
     </div>
 
   </main>
