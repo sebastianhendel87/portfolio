@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
   <title>Dune — Sebastian Hendel</title>
   <style>
     @font-face {
@@ -196,29 +198,32 @@
       aspect-ratio: 21/9;
     }
 
-    /* Project info module — igual que spotify.html */
+    /* Project info module — same structure as carbo-culture.html */
     .project-info-module {
       display: grid;
-      grid-template-columns: minmax(0, 260px) 1fr;
-      gap: 60px 80px;
-      margin-bottom: 80px;
+      grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+      gap: 40px 56px;
+      margin-bottom: 56px;
       align-items: start;
     }
     .project-info-left {
       display: flex;
       flex-direction: column;
-      gap: 32px;
-      max-width: 260px;
+      gap: 28px;
+      max-width: 280px;
+      min-width: 0;
     }
     .project-info-meta-row {
       display: flex;
-      gap: 48px;
+      flex-wrap: wrap;
+      gap: 28px 40px;
     }
     .project-info-meta-item {
       display: flex;
       flex-direction: column;
       gap: 6px;
       text-align: left;
+      min-width: 0;
     }
     .project-info-meta-item .label {
       font-size: 14px;
@@ -229,15 +234,16 @@
       font-size: 14px;
       font-weight: 400;
       color: var(--muted);
-      max-width: 110px;
-    }
-    .project-info-spacer {
-      min-height: 5em;
+      line-height: 1.45;
+      max-width: none;
     }
     .project-info-right {
-      justify-self: end;
-      width: 620px;
-      margin-right: 32px;
+      justify-self: stretch;
+      width: 100%;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: 0;
+      min-width: 0;
     }
     .project-info-right h2 {
       font-size: clamp(28px, 4vw, 40px);
@@ -257,35 +263,35 @@
     .project-info-right p:last-child {
       margin-bottom: 0;
     }
-    .project-info-module--tight {
-      gap: 48px 80px;
-      margin-bottom: 56px;
-    }
-    .project-info-module--tight .project-info-spacer {
-      min-height: 2em;
-    }
-    .project-info-module--tight .project-info-right h2 {
-      font-size: clamp(26px, 3.5vw, 36px);
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      line-height: 1.12;
-      margin: 0 0 24px;
-    }
-    .project-info-module--tight .project-info-right p {
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 1.5;
-      margin: 0 0 12px;
+    .project-info-right h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      margin: 28px 0 10px;
       color: var(--text-strong);
     }
-    .project-info-module--tight .project-info-right p:last-child {
-      margin-bottom: 0;
+    .project-info-right h3:first-of-type {
+      margin-top: 0;
+    }
+    .project-info-right hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 26px 0;
+    }
+    @media (max-width: 900px) {
+      .project-info-module {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .project-info-right {
+        margin-left: 0;
+        max-width: none;
+      }
     }
     @media (max-width: 768px) {
       .project-info-module {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        margin-bottom: 60px;
+        margin-bottom: 48px;
       }
     }
 
@@ -447,7 +453,7 @@
       <video src="dune/logo-reveal-dark.mp4" autoplay muted loop playsinline></video>
     </div>
 
-    <div class="project-info-module project-info-module--tight">
+    <div class="project-info-module">
       <div class="project-info-left">
         <div class="project-info-meta-row">
           <div class="project-info-meta-item">
@@ -463,12 +469,31 @@
           <span class="label">Team</span>
           <span class="value">Design, Engineering, Product</span>
         </div>
-        <div class="project-info-spacer"></div>
       </div>
       <div class="project-info-right">
-        <h2>Lorem ipsum dolor sit amet<br>consectetur adipiscing elit</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h2>Evolving Dune’s brand for its next phase</h2>
+
+        <h3>The challenge</h3>
+        <p>Dune had strong brand recognition, but its identity was starting to feel out of sync with where the product and the company were heading.</p>
+        <p>In a crypto landscape dominated by neon and visual noise, the opportunity was to move in a more refined, distinctive direction. The goal was to modernize the brand without losing the elements that made it instantly recognizable, evolving it rather than replacing it.</p>
+
+        <hr>
+
+        <h3>The process</h3>
+        <p>Balancing continuity with reinvention.</p>
+        <p>We audited the existing identity to identify what carried equity and what limited it, then built a more cohesive and flexible system around those core elements. As new product directions emerged, we worked closely with the team to define how each would live within or expand beyond the brand ecosystem.</p>
+
+        <hr>
+
+        <h3>The outcome</h3>
+        <p>A refreshed brand system and a growing product ecosystem.</p>
+        <p>Alongside the evolution of Dune’s core identity, we developed a new brand for SIM, their cross-chain app, designed to speak to a different audience while still feeling connected to the parent brand.</p>
+        <p>We also redesigned the website to better reflect where Dune is today, clarifying its offering, product ecosystem, and overall positioning.</p>
+
+        <hr>
+
+        <h3>Results</h3>
+        <p>The updated brand gave Dune a more distinctive and scalable presence, supporting new product launches and making its offering clearer and easier to navigate.</p>
       </div>
     </div>
 

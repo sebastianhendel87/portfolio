@@ -55,13 +55,28 @@
       --home-y: 56px;
       --home-y-tight: 12px;
       --home-footer-bottom: 20px;
+      /* Space between “Explore work” block and About — tight but keeps carousel out of frame at #about */
+      --work-about-gap: clamp(84px, 14vh, 180px);
+      /* Pull “Explore work” up over the carousel tail; paired with padding-top + same bg */
+      --explore-pull: clamp(72px, 11vh, 140px);
+      /* Extra air between carousel bottom and “Explore work” link */
+      --explore-carousel-gap: 18px;
+      --nav-scroll-pad: 96px;
     }
     @media (max-width: 768px) {
       :root {
         --home-y: 44px;
         --home-y-tight: 10px;
         --home-footer-bottom: 16px;
+        --work-about-gap: clamp(68px, 12vh, 150px);
+        --explore-pull: clamp(48px, 8vh, 96px);
+        --explore-carousel-gap: 16px;
+        --nav-scroll-pad: 80px;
       }
+    }
+
+    html {
+      scroll-padding-top: var(--nav-scroll-pad);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -87,6 +102,17 @@
       justify-content: space-between;
       align-items: center;
       background: var(--bg);
+    }
+    /* Opaque strip below fixed nav — kills 1px/subpixel lines where scrolling content peeks under the bar */
+    .navbar::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -24px;
+      height: 24px;
+      background: var(--bg);
+      pointer-events: none;
     }
     .navbar .name {
       font-size: 20px;
@@ -203,10 +229,24 @@
     #selected-work {
       padding-bottom: 0;
     }
+
+    /* Extra breathing room before #about */
+    .work-about-gap {
+      min-height: var(--work-about-gap);
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      border: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+
     #about {
-      margin-top: var(--home-y);
-      padding-top: 0;
+      margin-top: 0;
+      padding-top: var(--nav-scroll-pad);
       padding-bottom: 0;
+      background: var(--bg);
+      scroll-margin-top: 0;
     }
     #selected-work .container {
       max-width: 1600px;
@@ -222,21 +262,39 @@
     #selected-work .container > p:last-child {
       margin-bottom: 0;
     }
+    /* Covers carousel bottom band: row slides up, solid bg masks image under fixed nav */
+    #selected-work .explore-work-callout {
+      position: relative;
+      z-index: 2;
+      margin-top: calc(-1 * var(--explore-pull));
+      padding-top: calc(var(--explore-pull) + var(--explore-carousel-gap));
+      margin-left: -32px;
+      margin-right: -32px;
+      width: calc(100% + 64px);
+      padding-left: 32px;
+      padding-right: 32px;
+      box-sizing: border-box;
+      background: var(--bg);
+      max-width: none;
+    }
 
-    /* Carousel — fade */
+    /* Carousel — fade; strict clip so no subpixel image bleeds past the box */
     #selected-work .carousel {
       position: relative;
       width: 100%;
       max-width: 1600px;
-      margin: 32px auto;
+      margin: 32px auto 0;
       border-radius: 4px;
       overflow: hidden;
       background: var(--surface);
+      contain: paint;
+      isolation: isolate;
     }
     #selected-work .carousel-track {
       position: relative;
       width: 100%;
       aspect-ratio: 16/9;
+      overflow: hidden;
     }
     #selected-work .carousel-slide {
       position: absolute;
@@ -259,6 +317,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
+      display: block;
     }
 
     /* About — one grid so “Skills” lines up with the list column at all widths */
@@ -401,9 +461,11 @@
         padding-bottom: 0;
       }
       #about {
-        margin-top: var(--home-y);
-        padding-top: 0;
+        margin-top: 0;
+        padding-top: var(--nav-scroll-pad);
         padding-bottom: 0;
+        background: var(--bg);
+        scroll-margin-top: 0;
       }
       section p {
         font-size: 18px;
@@ -434,6 +496,13 @@
       #about .about-footer-right {
         width: 100%;
         justify-content: flex-end;
+      }
+      #selected-work .explore-work-callout {
+        margin-left: -20px;
+        margin-right: -20px;
+        width: calc(100% + 40px);
+        padding-left: 20px;
+        padding-right: 20px;
       }
     }
 
@@ -562,9 +631,11 @@
           <div class="carousel-slide"><img src="slide-5%202.png" alt="Work 3"></div>
         </div>
       </div>
-      <p class="hp-animate hp-body-text"><a href="work.html">Explore work →</a></p>
+      <p class="hp-animate hp-body-text explore-work-callout"><a href="work.html">Explore work →</a></p>
     </div>
   </section>
+
+  <div class="work-about-gap" aria-hidden="true"></div>
 
   <section id="about" class="hp-scroll-module">
     <div class="container">
