@@ -1,0 +1,84 @@
+DUNE PAGE — DO THIS IN ORDER
+=============================
+
+BEFORE YOU START (one-time check)
+---------------------------------
+On your Mac, open Finder.
+
+Click:  Documents  →  Portfolio  →  SH Website - Cursor  →  Dune
+
+You should see these 5 files (names must match exactly):
+
+  dune-01.mp4
+  dune-02.mp4
+  dune-03.mp4
+  dune-04.mov
+  dune-05.mov
+
+If they are there, you do not move them. Leave them there.
+
+
+STEP 1 — OPEN THE PROJECT FOLDER
+--------------------------------
+In Finder, go to the folder where your portfolio website files live (the folder that contains
+dune.html and the file "Preview in Chrome.command").
+
+That folder is usually here:
+
+  Google Drive  →  …  →  Cursor  →  …  →  portfolio
+
+(It is the folder named "portfolio" inside your Portfolio personal project.)
+
+
+STEP 2 — START THE PREVIEW
+--------------------------
+Double-click the file:   Preview in Chrome.command
+
+If the Mac blocks it:  right-click the file  →  Open  →  Open.
+
+A Terminal window opens. Wait until you see text like:
+
+  http://localhost:8877/
+
+(The number might be 8878, 8879, etc. — use exactly what YOUR window shows.)
+
+
+STEP 3 — OPEN THE DUNE PAGE IN CHROME
+-------------------------------------
+1. Open Google Chrome.
+2. Click the address bar at the top.
+3. Type or paste TWO things together, no space:
+
+   First:  the http://localhost:.... line from Terminal (example: http://localhost:8877/)
+   Then:   dune.html
+
+   Full example:   http://localhost:8877/dune.html
+
+4. Press Enter.
+
+You should see the Dune page. The five videos load from your Documents folder automatically.
+
+
+IF DOUBLE-CLICK DOES NOT WORK — USE TERMINAL
+---------------------------------------------
+1. Press Cmd+Space, type Terminal, press Enter.
+
+2. Copy the line below (only the line), paste into Terminal, press Enter:
+
+cd "/Users/sebastianhendel/Library/CloudStorage/GoogleDrive-sebastianhendel@gmail.com/My Drive/07 Personal/Cursor/Sebastian H/Desarrollos/Portfolio personal/portfolio" && python3 serve.py
+
+3. When you see http://localhost:.... in the window, open Chrome and go to:
+
+   that address + dune.html
+
+   Example: http://localhost:8877/dune.html
+
+
+STOP THE PREVIEW
+----------------
+Click the Terminal window, press Ctrl+C.
+
+
+GITHUB (NOT FOR LOCAL PREVIEW)
+------------------------------
+https://sebastianhendel87.github.io/portfolio/

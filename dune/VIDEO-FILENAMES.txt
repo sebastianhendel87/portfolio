@@ -1,0 +1,17 @@
+Clips 1–5 are NOT read from this folder when you use the local preview.
+
+They are read from your Mac here:
+
+  Documents / Portfolio / SH Website - Cursor / Dune
+
+Files (must match exactly):
+
+  dune-01.mp4
+  dune-02.mp4
+  dune-03.mp4
+  dune-04.mov
+  dune-05.mov
+
+Run: python3 serve.py   (from the portfolio folder)
+
+The hero video (logo-reveal-dark.mp4) still lives in this repo folder next to this file.

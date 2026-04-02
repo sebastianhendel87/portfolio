@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Dune — Sebastian Hendel</title>
+  <style>
+    @font-face {
+      font-family: 'Monument Grotesk';
+      src: url('fonts/MonumentGrotesk.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Monument Grotesk';
+      src: url('fonts/MonumentGrotesk-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --text: #f5f5f5;
+      --text-strong: #fff;
+      --muted: #999;
+      --border: #2a2a2a;
+      --surface: #111;
+    }
+    body.light {
+      --bg: #e8e6e4;
+      --text: #1a1a1a;
+      --text-strong: #0a0a0a;
+      --muted: #666;
+      --border: #d2d0cd;
+      --surface: #dddcd9;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Monument Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { opacity: 0.85; }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg);
+    }
+    .navbar .name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-strong);
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .nav-links a {
+      color: var(--text);
+      position: relative;
+      transition: color 0.2s ease;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      background: currentColor;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--muted); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .project-header {
+      padding: 140px 40px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .project-header h1 {
+      font-size: clamp(56px, 10vw, 120px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin: 0 0 16px;
+      color: var(--text-strong);
+    }
+    .project-header__line {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .hero-video {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      max-width: 1400px;
+      margin: 0 auto 0;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+    .hero-video video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .reading-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+      min-height: 100vh;
+      max-width: 1400px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .reading-stage__visual {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      max-height: 100vh;
+      background: #0a0a0a;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .visual-mosaic {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr minmax(0, 28%);
+      gap: 6px;
+      padding: 10px;
+    }
+    .visual-cell {
+      position: relative;
+      min-height: 0;
+      background: #111;
+      overflow: hidden;
+    }
+    .visual-cell--wide {
+      grid-column: 1 / -1;
+    }
+    .visual-cell video,
+    .visual-cell img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .reading-stage__scroll {
+      padding: 48px 44px 80px;
+      overflow: visible;
+    }
+
+    .reading-stage__scroll h2 {
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin: 0 0 8px;
+      color: var(--text-strong);
+    }
+    .reading-stage__scroll h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      margin: 36px 0 12px;
+      color: var(--text-strong);
+    }
+    .reading-stage__scroll h3:first-of-type {
+      margin-top: 0;
+    }
+    .reading-stage__scroll p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 0 0 16px;
+      color: var(--text-strong);
+    }
+    .reading-stage__scroll hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+
+    .project-footer {
+      padding: 120px 40px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .next-project {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .next-project-link {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--text-strong);
+    }
+
+    footer {
+      padding: 48px 40px;
+      font-size: 14px;
+      opacity: 0.6;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    footer a { text-decoration: underline; text-underline-offset: 4px; }
+
+    @media (max-width: 960px) {
+      .reading-stage {
+        grid-template-columns: 1fr;
+        min-height: unset;
+        border-bottom: none;
+      }
+      .reading-stage__visual {
+        position: relative;
+        height: auto;
+        max-height: none;
+        min-height: 65vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .visual-mosaic {
+        min-height: 60vh;
+      }
+      .reading-stage__scroll {
+        padding: 32px 24px 56px;
+      }
+      .project-header { padding: 100px 20px 32px; }
+      .hero-video { margin: 0 20px; }
+      .navbar { padding: 20px; }
+      .nav-links { gap: 20px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body class="light">
+
+  <nav class="navbar">
+    <a href="index.html" class="name">Sebastian Hendel</a>
+    <div class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="work.html">Works</a>
+    </div>
+  </nav>
+
+  <header class="project-header">
+    <h1>Dune</h1>
+    <p class="project-header__line">Visual Identity + Website · 2025 · Project management</p>
+  </header>
+
+  <div class="hero-video">
+    <video src="dune/logo-reveal-dark.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — logo reveal"></video>
+  </div>
+
+  <section class="reading-stage" aria-label="Dune case study">
+    <aside class="reading-stage__visual">
+      <div class="visual-mosaic">
+        <div class="visual-cell">
+          <video src="dune/dune-01.mp4" autoplay muted loop playsinline preload="auto" aria-label=""></video>
+        </div>
+        <div class="visual-cell">
+          <video src="dune/dune-02.mp4" autoplay muted loop playsinline preload="auto" aria-label=""></video>
+        </div>
+        <div class="visual-cell">
+          <video src="dune/dune-03.mp4" autoplay muted loop playsinline preload="auto" aria-label=""></video>
+        </div>
+        <div class="visual-cell">
+          <video src="dune/dune-04.mov" autoplay muted loop playsinline preload="auto" aria-label=""></video>
+        </div>
+        <div class="visual-cell visual-cell--wide">
+          <video src="dune/dune-05.mov" autoplay muted loop playsinline preload="auto" aria-label=""></video>
+        </div>
+      </div>
+    </aside>
+
+    <div class="reading-stage__scroll">
+      <h2>Evolving Dune’s brand for its next phase</h2>
+
+      <h3>The challenge</h3>
+      <p>Dune had strong brand recognition, but its identity was starting to feel out of sync with where the product and the company were heading.</p>
+      <p>In a crypto landscape dominated by neon and visual noise, the opportunity was to move in a more refined, distinctive direction. The goal was to modernize the brand without losing the elements that made it instantly recognizable, evolving it rather than replacing it.</p>
+
+      <hr>
+
+      <h3>The process</h3>
+      <p>Balancing continuity with reinvention.</p>
+      <p>We audited the existing identity to identify what carried equity and what limited it, then built a more cohesive and flexible system around those core elements. As new product directions emerged, we worked closely with the team to define how each would live within or expand beyond the brand ecosystem.</p>
+
+      <hr>
+
+      <h3>The outcome</h3>
+      <p>A refreshed brand system and a growing product ecosystem.</p>
+      <p>Alongside the evolution of Dune’s core identity, we developed a new brand for SIM, their cross-chain app, designed to speak to a different audience while still feeling connected to the parent brand.</p>
+      <p>We also redesigned the website to better reflect where Dune is today, clarifying its offering, product ecosystem, and overall positioning.</p>
+
+      <hr>
+
+      <h3>Results</h3>
+      <p>The updated brand gave Dune a more distinctive and scalable presence, supporting new product launches and making its offering clearer and easier to navigate.</p>
+    </div>
+  </section>
+
+  <div class="project-footer">
+    <span class="next-project">Next Project</span><br>
+    <a href="spotify.html" class="next-project-link">Spotify →</a>
+  </div>
+
+  <footer>
+    <span>© 2026 Sebastian Hendel</span>
+    <a href="mailto:sebastianhendel@gmail.com">Contact</a>
+  </footer>
+
+</body>
+</html>

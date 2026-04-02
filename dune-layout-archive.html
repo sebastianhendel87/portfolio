@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dune — layout archive (reference)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #e8e6e4;
+      color: #1a1a1a;
+      line-height: 1.5;
+      padding: 48px 40px 80px;
+      max-width: 720px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+    .muted {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 0 0 32px;
+    }
+    h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin: 28px 0 12px;
+      font-weight: 600;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #d2d0cd;
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+    a.file {
+      font-weight: 600;
+      color: #0a0a0a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    a.file:hover { opacity: 0.8; }
+    .desc {
+      font-size: 0.9rem;
+      color: #444;
+      margin-top: 4px;
+    }
+    .note {
+      font-size: 0.85rem;
+      background: #dddcd9;
+      padding: 16px;
+      border-radius: 4px;
+      margin-top: 32px;
+      color: #333;
+    }
+    code {
+      font-size: 0.9em;
+      background: rgba(0,0,0,0.06);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dune — layout archive</h1>
+  <p class="muted">Keep this file inside the portfolio folder (next to <code>dune.html</code>). Open the links below while the local server is running.</p>
+
+  <h2>Pages</h2>
+  <ul>
+    <li>
+      <a class="file" href="dune.html">dune.html</a>
+      <div class="desc">Main / published case study (default).</div>
+    </li>
+    <li>
+      <a class="file" href="dune-v2.html">dune-v2.html</a>
+      <div class="desc">Split columns: text + media in alternating rows.</div>
+    </li>
+    <li>
+      <a class="file" href="dune-v3.html">dune-v3.html</a>
+      <div class="desc">Numbered chapters (1.0, 2.0…) with mosaics; adjustable text width.</div>
+    </li>
+    <li>
+      <a class="file" href="dune-v4.html">dune-v4.html</a>
+      <div class="desc">Sticky mosaic on the left; story scrolls on the right (desktop).</div>
+    </li>
+  </ul>
+
+  <h2>Local preview</h2>
+  <p class="muted" style="margin-bottom: 12px;">From the portfolio folder in Terminal:</p>
+  <p><code>python3 serve.py</code></p>
+  <p class="muted" style="margin-top: 16px;">Then open, for example:</p>
+  <p><code>http://localhost:8877/dune-layout-archive.html</code> <span class="muted">(port may differ)</span></p>
+
+  <div class="note">
+    <strong>Five clips</strong> (<code>dune-01</code> … <code>dune-05</code>) are loaded from your Mac via <code>serve.py</code> — see <code>serve.py</code> for the <code>Documents/…/Dune</code> path. Hero <code>logo-reveal-dark.mp4</code> stays in the repo <code>dune/</code> folder.
+  </div>
+
+</body>
+</html>

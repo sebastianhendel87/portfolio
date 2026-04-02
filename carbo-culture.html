@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <title>Carbo Culture — Sebastian Hendel</title>
   <style>
     @font-face {
@@ -128,7 +128,8 @@
       background: #0a0a0a;
       overflow: hidden;
     }
-    .project-image.hero.hero--video video {
+    .project-image.hero.hero--video video,
+    .project-image.hero.hero--video > img {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -471,10 +472,7 @@
 
   <main class="project-content">
     <!--
-      Videos Carbo (carpeta carbo-culture/):
-      1) Hero: logo-bw.mp4
-      2) Full-width: live_action_nature.mp4
-      3) Grilla con 02.png: live_action.mp4
+      Hero: logo-bw.mp4. Landscape clip live_action_nature.mp4 sits in former Frame 4 slot; still is cc-frame-4.png.
     -->
 
     <div id="carbo-hero-video" class="project-image hero hero--video">
@@ -528,14 +526,13 @@
 
     <div class="two-column">
       <div class="project-image">
-        <img src="carbo-culture/web-screens.png" alt="Carbo Culture web screens">
+        <img src="carbo-culture/cc-01.png" alt="Carbo Culture — campaign visual">
       </div>
       <div class="project-image">
-        <img src="carbo-culture/phone-screens.png" alt="Carbo Culture phone screens">
+        <img src="carbo-culture/cc-frame-2.png" alt="Carbo Culture — screen 2">
       </div>
     </div>
 
-    <!-- VIDEO: live action / naturaleza (full width) -->
     <div id="carbo-video-nature" class="project-image project-image--embed">
       <video
         src="carbo-culture/live_action_nature.mp4"
@@ -544,9 +541,13 @@
         aria-label="Carbo Culture — live action (nature)"></video>
     </div>
 
+    <div class="project-image">
+      <img src="carbo-culture/cc-frame-4.png" alt="Carbo Culture — brand frame">
+    </div>
+
     <div class="two-column">
       <div class="project-image">
-        <img src="carbo-culture/02.png" alt="Carbo Culture identity">
+        <img src="carbo-culture/cc-group-2.png" alt="Carbo Culture — identity system">
       </div>
       <div id="carbo-video-live-action" class="project-image project-image--embed">
         <video
@@ -557,8 +558,12 @@
       </div>
     </div>
 
+    <div class="project-image">
+      <img src="carbo-culture/cc-frame-9.png" alt="Carbo Culture — layout frame">
+    </div>
+
     <div class="project-image project-image--tail">
-      <img src="carbo-culture/post-01.png" alt="Carbo Culture campaign">
+      <img src="carbo-culture/cc-frame-1.png" alt="Carbo Culture — screen 1">
     </div>
 
   </main>

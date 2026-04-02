@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <title>Dune — Sebastian Hendel</title>
+  <title>Dune (layout v2) — Sebastian Hendel</title>
   <style>
     @font-face {
       font-family: 'Monument Grotesk';
@@ -52,7 +52,6 @@
     a { color: inherit; text-decoration: none; }
     a:hover { opacity: 0.85; }
 
-    /* Nav */
     .navbar {
       position: fixed;
       top: 0;
@@ -96,7 +95,6 @@
     .nav-links a:hover { color: var(--muted-hover); }
     .nav-links a:hover::after { width: 100%; }
 
-    /* Project Header — mismo ritmo que spotify.html / carbo-culture.html */
     .project-header {
       min-height: 70vh;
       display: flex;
@@ -138,34 +136,25 @@
       font-weight: 400;
     }
 
-    /* Content sections */
     .project-content {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 40px 120px;
     }
 
-    /* Image containers */
     .project-image {
       width: 100%;
-      margin: 0 0 80px 0;
-      border-radius: 0;
+      margin: 0;
       overflow: hidden;
       background: var(--surface);
-    }
-    .project-image:last-child {
-      margin-bottom: 0;
-    }
-    .project-image img,
-    .project-image video {
-      width: 100%;
-      height: auto;
-      display: block;
     }
     .project-image.hero.hero--video {
       position: relative;
       background: #0a0a0a;
       overflow: hidden;
+      aspect-ratio: 16/10;
+      max-width: 1400px;
+      margin: 0 auto 48px;
     }
     .project-image.hero.hero--video video {
       position: absolute;
@@ -175,35 +164,14 @@
       object-fit: cover;
       object-position: center;
     }
-    .project-image.full:has(img),
-    .project-image.full:has(video) {
-      aspect-ratio: auto;
-    }
-    .project-image-placeholder {
-      width: 100%;
-      aspect-ratio: 16/9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 400;
-    }
-    .project-image.hero {
-      aspect-ratio: 16/10;
-    }
-    .project-image.full {
-      aspect-ratio: 21/9;
-    }
 
-    /* Vídeos fuera del hero: caja fija + cover (same as carbo-culture.html) */
-    .project-image.project-image--embed {
+    .project-image--embed {
       position: relative;
       aspect-ratio: 16 / 9;
       background: #0a0a0a;
       overflow: hidden;
     }
-    .project-image.project-image--embed video {
+    .project-image--embed video {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -213,152 +181,91 @@
       display: block;
     }
 
-    /* Project info module — same structure as carbo-culture.html */
-    .project-info-module {
-      display: grid;
-      grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
-      gap: 40px 56px;
-      margin-bottom: 56px;
-      align-items: start;
-    }
-    .project-info-left {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      max-width: 280px;
-      min-width: 0;
-    }
-    .project-info-meta-row {
+    .v2-meta-strip {
       display: flex;
       flex-wrap: wrap;
-      gap: 28px 40px;
-    }
-    .project-info-meta-item {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      text-align: left;
-      min-width: 0;
-    }
-    .project-info-meta-item .label {
+      gap: 28px 48px;
+      padding: 24px 0 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
       font-size: 14px;
+    }
+    .v2-meta-strip .label {
       font-weight: 500;
       color: var(--text-strong);
+      display: block;
+      margin-bottom: 4px;
     }
-    .project-info-meta-item .value {
-      font-size: 14px;
-      font-weight: 400;
+    .v2-meta-strip .value {
       color: var(--muted);
       line-height: 1.45;
-      max-width: none;
     }
-    .project-info-right {
-      justify-self: stretch;
-      width: 100%;
-      max-width: 620px;
-      margin-left: auto;
-      margin-right: 0;
+
+    .v2-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 48px;
+      align-items: stretch;
+      margin-bottom: 64px;
+    }
+    .v2-split__text {
       min-width: 0;
     }
-    .project-info-right h2 {
-      font-size: clamp(28px, 4vw, 40px);
+    .v2-split__text h2 {
+      font-size: clamp(22px, 3vw, 28px);
       font-weight: 500;
       letter-spacing: -0.03em;
-      line-height: 1.2;
-      margin: 0 0 24px;
-      color: var(--text-strong);
-    }
-    .project-info-right p {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.6;
       margin: 0 0 16px;
       color: var(--text-strong);
     }
-    .project-info-right p:last-child {
-      margin-bottom: 0;
-    }
-    .project-info-right h3 {
+    .v2-split__text h3 {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       font-weight: 600;
-      margin: 28px 0 10px;
+      margin: 0 0 12px;
       color: var(--text-strong);
     }
-    .project-info-right h3:first-of-type {
-      margin-top: 0;
+    .v2-split__text p {
+      font-size: 14px;
+      line-height: 1.65;
+      margin: 0 0 14px;
+      color: var(--text-strong);
     }
-    .project-info-right hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 26px 0;
+    .v2-split__text p:last-child {
+      margin-bottom: 0;
     }
-    @media (max-width: 900px) {
-      .project-info-module {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-      .project-info-right {
-        margin-left: 0;
-        max-width: none;
-      }
+    .v2-split--flip .v2-split__text {
+      order: 2;
     }
-    @media (max-width: 768px) {
-      .project-info-module {
-        margin-bottom: 48px;
-      }
+    .v2-split--flip .v2-split__media {
+      order: 1;
     }
 
-    /* Two column layout for some sections */
-    .two-column {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin: 0 0 80px 0;
-    }
-    .two-column .project-image {
-      margin: 0;
-    }
-    @media (max-width: 768px) {
-      .two-column {
-        grid-template-columns: 1fr;
-        gap: 80px;
-      }
-    }
-
-    /* Footer navigation */
-    .two-column .project-image {
-      background: #0a0a0a;
-    }
-    .two-column .project-image img,
-    .two-column .project-image video {
-      width: 100%;
-      height: auto;
-      display: block;
-      vertical-align: bottom;
-    }
-    .two-column .project-image:has(video) {
+    .v2-still-wrap {
       position: relative;
-      z-index: 1;
+      background: #0a0a0a;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      width: 100%;
     }
-    .two-column .project-image.project-image--embed video {
+    .v2-still-wrap .v2-still {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
-    }
-    .project-image--tail {
-      background: #0a0a0a;
-    }
-    .project-image--tail img,
-    .project-image--tail video {
-      width: 100%;
-      height: auto;
       display: block;
-      vertical-align: bottom;
+    }
+
+    .v2-full {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 0 0 0;
+      padding-top: 8px;
+    }
+    .v2-full.project-image--embed {
+      border-radius: 0;
     }
 
     .project-footer {
@@ -399,17 +306,14 @@
     }
     footer a { text-decoration: underline; text-underline-offset: 4px; }
 
-    /* Mobile optimizations */
-    @media (max-width: 768px) {
-      .navbar {
-        padding: 20px 20px;
+    @media (max-width: 900px) {
+      .v2-split,
+      .v2-split--flip {
+        grid-template-columns: 1fr;
       }
-      .navbar .name {
-        font-size: 16px;
-      }
-      .nav-links {
-        gap: 20px;
-        font-size: 16px;
+      .v2-split--flip .v2-split__text,
+      .v2-split--flip .v2-split__media {
+        order: unset;
       }
       .project-header {
         min-height: auto;
@@ -431,18 +335,10 @@
       .project-content {
         padding: 40px 20px 80px;
       }
-      .two-column {
-        gap: 40px;
-      }
-      .project-footer {
-        padding: 80px 20px 60px;
-      }
-      .next-project-link {
-        font-size: clamp(32px, 8vw, 48px);
-      }
-      footer {
-        padding: 40px 20px;
-      }
+      .navbar { padding: 20px 20px; }
+      .nav-links { gap: 20px; font-size: 16px; }
+      .project-footer { padding: 80px 20px 60px; }
+      footer { padding: 40px 20px; }
     }
   </style>
 </head>
@@ -473,75 +369,88 @@
 
   <main class="project-content">
 
-    <div id="dune-hero-logo" class="project-image hero hero--video">
+    <div class="project-image hero hero--video">
       <video src="dune/logo-reveal-dark.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — logo reveal"></video>
     </div>
 
-    <div class="project-info-module">
-      <div class="project-info-left">
-        <div class="project-info-meta-row">
-          <div class="project-info-meta-item">
-            <span class="label">Project</span>
-            <span class="value">Visual Identity Website<br>2025</span>
-          </div>
-          <div class="project-info-meta-item">
-            <span class="label">Work</span>
-            <span class="value">Project management, delivery</span>
-          </div>
-        </div>
-        <div class="project-info-meta-item">
-          <span class="label">Team</span>
-          <span class="value">Design, Engineering, Product</span>
-        </div>
+    <div class="v2-meta-strip">
+      <div>
+        <span class="label">Project</span>
+        <span class="value">Visual Identity Website · 2025</span>
       </div>
-      <div class="project-info-right">
-        <h2>Evolving Dune’s brand for its next phase</h2>
+      <div>
+        <span class="label">Work</span>
+        <span class="value">Project management, delivery</span>
+      </div>
+      <div>
+        <span class="label">Team</span>
+        <span class="value">Design, Engineering, Product</span>
+      </div>
+    </div>
 
+    <section class="v2-split">
+      <div class="v2-split__text">
+        <h2>Evolving Dune’s brand for its next phase</h2>
         <h3>The challenge</h3>
         <p>Dune had strong brand recognition, but its identity was starting to feel out of sync with where the product and the company were heading.</p>
         <p>In a crypto landscape dominated by neon and visual noise, the opportunity was to move in a more refined, distinctive direction. The goal was to modernize the brand without losing the elements that made it instantly recognizable, evolving it rather than replacing it.</p>
+      </div>
+      <div class="v2-split__media project-image--embed">
+        <video src="dune/dune-01.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 1"></video>
+      </div>
+    </section>
 
-        <hr>
-
+    <section class="v2-split v2-split--flip">
+      <div class="v2-split__text">
         <h3>The process</h3>
         <p>Balancing continuity with reinvention.</p>
         <p>We audited the existing identity to identify what carried equity and what limited it, then built a more cohesive and flexible system around those core elements. As new product directions emerged, we worked closely with the team to define how each would live within or expand beyond the brand ecosystem.</p>
+      </div>
+      <div class="v2-split__media project-image--embed">
+        <video src="dune/dune-02.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 2"></video>
+      </div>
+    </section>
 
-        <hr>
-
+    <section class="v2-split">
+      <div class="v2-split__text">
         <h3>The outcome</h3>
         <p>A refreshed brand system and a growing product ecosystem.</p>
         <p>Alongside the evolution of Dune’s core identity, we developed a new brand for SIM, their cross-chain app, designed to speak to a different audience while still feeling connected to the parent brand.</p>
         <p>We also redesigned the website to better reflect where Dune is today, clarifying its offering, product ecosystem, and overall positioning.</p>
+      </div>
+      <div class="v2-split__media v2-still-wrap">
+        <img class="v2-still" src="dune/seq-02.png" alt="">
+      </div>
+    </section>
 
-        <hr>
-
+    <section class="v2-split v2-split--flip">
+      <div class="v2-split__text">
         <h3>Results</h3>
         <p>The updated brand gave Dune a more distinctive and scalable presence, supporting new product launches and making its offering clearer and easier to navigate.</p>
       </div>
-    </div>
-
-    <div class="two-column">
-      <div class="project-image project-image--embed">
-        <video src="dune/dune-01.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 1"></video>
-      </div>
-      <div class="project-image project-image--embed">
-        <video src="dune/dune-02.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 2"></video>
-      </div>
-    </div>
-
-    <div class="two-column">
-      <div class="project-image project-image--embed">
+      <div class="v2-split__media project-image--embed">
         <video src="dune/dune-03.mp4" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 3"></video>
       </div>
-      <div class="project-image project-image--embed">
+    </section>
+
+    <section class="v2-split">
+      <div class="v2-split__media project-image--embed">
         <video src="dune/dune-04.mov" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 4"></video>
       </div>
-    </div>
+      <div class="v2-split__media v2-still-wrap">
+        <img class="v2-still" src="dune/website-sim-landing.png" alt="">
+      </div>
+    </section>
 
-    <div class="project-image project-image--embed">
-      <video src="dune/dune-05.mov" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 5"></video>
-    </div>
+    <section class="v2-split v2-split--flip">
+      <div class="v2-split__text">
+        <h3>Application</h3>
+        <p>Motion and product screens together — the same system in the browser and in motion.</p>
+      </div>
+      <div class="v2-split__media project-image--embed">
+        <video src="dune/dune-05.mov" autoplay muted loop playsinline preload="auto" aria-label="Dune — clip 5"></video>
+      </div>
+    </section>
 
   </main>
 
