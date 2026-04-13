@@ -4,23 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <title>Carbo Culture — Sebastian Hendel</title>
+  <title>Carbo Culture - Sebastian Hendel</title>
   <style>
-    @font-face {
-      font-family: 'Monument Grotesk';
-      src: url('fonts/MonumentGrotesk.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Monument Grotesk';
-      src: url('fonts/MonumentGrotesk-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
-
     :root {
       --bg: #0a0a0a;
       --text: #f5f5f5;
@@ -43,7 +28,7 @@
     *, *::before, *::after { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Monument Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
@@ -96,7 +81,7 @@
     .nav-links a:hover { color: var(--muted-hover); }
     .nav-links a:hover::after { width: 100%; }
 
-    /* Project Header — same layout as spotify.html */
+    /* Project Header - same layout as spotify.html */
     .project-header {
       min-height: 70vh;
       display: flex;
@@ -122,7 +107,7 @@
       gap: 40px;
     }
 
-    /* Hero video — same box as Spotify .project-image.hero (16/10), video fills with cover */
+    /* Hero video - same box as Spotify .project-image.hero (16/10), video fills with cover */
     .project-image.hero.hero--video {
       position: relative;
       background: #0a0a0a;
@@ -171,7 +156,7 @@
       font-weight: 400;
     }
 
-    /* Content sections — same as spotify.html */
+    /* Content sections - same as spotify.html */
     .project-content {
       max-width: 1400px;
       margin: 0 auto;
@@ -281,6 +266,32 @@
     .project-info-right p:last-child {
       margin-bottom: 0;
     }
+    /* Spotify case study prose (same as spotify.html .project-info-module--tight) */
+    .project-info-module--tight {
+      gap: 48px 80px;
+      margin-bottom: 56px;
+    }
+    .project-info-module--tight .project-info-spacer {
+      min-height: 2em;
+    }
+    .project-info-module--tight .project-info-right h2 {
+      font-size: clamp(26px, 3.5vw, 36px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin: 0 0 24px;
+      color: var(--text-strong);
+    }
+    .project-info-module--tight .project-info-right p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin: 0 0 12px;
+      color: var(--text-strong);
+    }
+    .project-info-module--tight .project-info-right p:last-child {
+      margin-bottom: 0;
+    }
     .project-info-right h3 {
       font-size: 11px;
       text-transform: uppercase;
@@ -313,7 +324,7 @@
       }
     }
 
-    /* Two column layout for some sections — same rhythm as spotify.html */
+    /* Two column layout for some sections - same rhythm as spotify.html */
     .two-column {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -398,7 +409,7 @@
     }
     footer a { text-decoration: underline; text-underline-offset: 4px; }
 
-    /* Mobile optimizations — same header + content as spotify.html */
+    /* Mobile optimizations - same header + content as spotify.html */
     @media (max-width: 768px) {
       .navbar {
         padding: 20px 20px;
@@ -479,7 +490,7 @@
       <video src="carbo-culture/logo-bw.mp4" autoplay muted loop playsinline preload="auto"></video>
     </div>
 
-    <div class="project-info-module">
+    <div class="project-info-module project-info-module--tight">
       <div class="project-info-left">
         <div class="project-info-meta-row">
           <div class="project-info-meta-item">
@@ -498,38 +509,20 @@
       </div>
       <div class="project-info-right">
         <h2>Making carbon removal tangible</h2>
-
-        <h3>The challenge</h3>
-        <p>How do you make complex processes like Carbolysis feel clear, engaging, and visually compelling?</p>
-        <p>The goal was to translate a highly technical carbon removal process into something people could understand at a glance — without oversimplifying its impact. It needed to communicate credibility, feel modern and optimistic, and open the message up to a broader audience beyond industry experts.</p>
-
-        <hr>
-
-        <h3>The process</h3>
-        <p>A full-spectrum design effort across strategy, copy, brand, and product.</p>
-        <p>We developed a refreshed visual and verbal identity grounded in Carbo Culture’s core values, bringing it to life through a flexible system spanning brand design, product thinking, 3D assets, infographics, and motion.</p>
-        <p>Starting from early exploration — gradients, patterns, and loose visual directions — we iterated through wireframes and prototypes into a cohesive, scalable system that could work across touchpoints.</p>
-
-        <hr>
-
-        <h3>The outcome</h3>
-        <p>A fully refreshed brand and digital experience.</p>
-        <p>We created a new identity that makes the science behind Carbo Culture both accessible and visually distinctive — from a new logo and design system to custom 3D visuals and clear, narrative-driven infographics.</p>
-        <p>The website was completely redesigned to better communicate how the technology works, why it matters, and where it’s going.</p>
-
-        <hr>
-
-        <h3>Results</h3>
-        <p>The new brand and website strengthened Carbo Culture’s presence and made their story easier to understand and share — supporting growth, partnerships, and broader visibility.</p>
+        <p>We translated a complex technology into a clear, engaging, and visually compelling experience, without losing its depth.</p>
+        <p>Through a full-spectrum design approach, we developed a new brand identity and website, alongside a flexible system spanning brand, product, and storytelling.</p>
+        <p>From early explorations to a cohesive visual language, we brought Carbo Culture’s process to life.</p>
+        <p>We created custom 3D assets, CGI, motion design, and filmed content to make the science both accessible and distinctive.</p>
+        <p>The result is a clearer narrative, stronger presence, and a platform built to support growth and partnerships.</p>
       </div>
     </div>
 
     <div class="two-column">
       <div class="project-image">
-        <img src="carbo-culture/cc-01.png" alt="Carbo Culture — campaign visual">
+        <img src="carbo-culture/cc-01.png" alt="Carbo Culture: campaign visual">
       </div>
       <div class="project-image">
-        <img src="carbo-culture/cc-frame-2.png" alt="Carbo Culture — screen 2">
+        <img src="carbo-culture/cc-frame-2.png" alt="Carbo Culture: screen 2">
       </div>
     </div>
 
@@ -538,32 +531,32 @@
         src="carbo-culture/live_action_nature.mp4"
         autoplay muted loop playsinline
         preload="auto"
-        aria-label="Carbo Culture — live action (nature)"></video>
+        aria-label="Carbo Culture: live action (nature)"></video>
     </div>
 
     <div class="project-image">
-      <img src="carbo-culture/cc-frame-4.png" alt="Carbo Culture — brand frame">
+      <img src="carbo-culture/cc-frame-4.png" alt="Carbo Culture: brand frame">
     </div>
 
     <div class="two-column">
       <div class="project-image">
-        <img src="carbo-culture/cc-group-2.png" alt="Carbo Culture — identity system">
+        <img src="carbo-culture/cc-group-2.png" alt="Carbo Culture: identity system">
       </div>
       <div id="carbo-video-live-action" class="project-image project-image--embed">
         <video
           src="carbo-culture/live_action.mp4"
           autoplay muted loop playsinline
           preload="auto"
-          aria-label="Carbo Culture — live action"></video>
+          aria-label="Carbo Culture: live action"></video>
       </div>
     </div>
 
     <div class="project-image">
-      <img src="carbo-culture/cc-frame-9.png" alt="Carbo Culture — layout frame">
+      <img src="carbo-culture/cc-frame-9.png" alt="Carbo Culture: layout frame">
     </div>
 
     <div class="project-image project-image--tail">
-      <img src="carbo-culture/cc-frame-1.png" alt="Carbo Culture — screen 1">
+      <img src="carbo-culture/cc-frame-1.png" alt="Carbo Culture: screen 1">
     </div>
 
   </main>
@@ -577,6 +570,18 @@
     <span>© 2026 Sebastian Hendel</span>
     <a href="mailto:sebastianhendel@gmail.com">Contact</a>
   </footer>
+
+  <script>
+    /* Drop video decode/network when leaving so the next page is not stuck behind range requests. */
+    window.addEventListener('pagehide', function (ev) {
+      if (ev.persisted) return;
+      document.querySelectorAll('video').forEach(function (v) {
+        v.pause();
+        v.removeAttribute('src');
+        v.load();
+      });
+    });
+  </script>
 
 </body>
 </html>

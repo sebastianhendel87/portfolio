@@ -6,22 +6,6 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <title>Sebastian Hendel — Project Manager</title>
   <style>
-    /* Monument Grotesk — Dinamo. Colocá los .woff2 en /fonts/ (ej. desde abcdinamo.com) */
-    @font-face {
-      font-family: 'Monument Grotesk';
-      src: url('fonts/MonumentGrotesk.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Monument Grotesk';
-      src: url('fonts/MonumentGrotesk-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
-
     /* Theme: misma escala, dark por defecto */
     :root {
       --bg: #0a0a0a;
@@ -82,7 +66,7 @@
     *, *::before, *::after { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Monument Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
@@ -276,6 +260,10 @@
       box-sizing: border-box;
       background: var(--bg);
       max-width: none;
+    }
+    /* Must stay opacity:1 when animated — hp-body-text ends at 0.9 and ghosts the carousel through the mask */
+    #selected-work .explore-work-callout.hp-animate.hp-in-view {
+      opacity: 1;
     }
 
     /* Carousel — fade; strict clip so no subpixel image bleeds past the box */
@@ -631,7 +619,7 @@
           <div class="carousel-slide"><img src="slide-5%202.png" alt="Work 3"></div>
         </div>
       </div>
-      <p class="hp-animate hp-body-text explore-work-callout"><a href="work.html">Explore work →</a></p>
+      <p class="hp-animate explore-work-callout"><a href="work.html">Explore work →</a></p>
     </div>
   </section>
 

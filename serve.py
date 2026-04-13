@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
-"""Serve the repo root with Cache-Control: no-store so a normal refresh picks up new media."""
+"""Serve the repo root for local preview.
+
+Uses ThreadingHTTPServer so many concurrent requests (video range seeks, images) do not
+block each other. A single-thread server queues everything: leaving a video-heavy page
+can look like navigation is broken.
+
+HTML is sent with no-cache so edits show on refresh. Images, fonts, and video use a
+short max-age so navigating between pages does not re-download large files every time
+(unlike no-store on everything, which makes the site feel very slow).
+"""
 from __future__ import annotations
 
 import errno
 import http.server
 import os
 import posixpath
-import socketserver
 import sys
 import urllib.parse
 
@@ -29,6 +37,14 @@ _DUNE_CLIP_NAMES = frozenset(
     }
 )
 
+# Tonscan assets live here on this Mac (not in Google Drive / not in the repo).
+# We search both the base folder and the "Tonscan hero" subfolder so you can keep
+# your original file organization.
+_TONSCAN_ASSET_DIRS = (
+    os.path.expanduser("~/Documents/Portfolio/Tonscan/Tonscan hero"),
+    os.path.expanduser("~/Documents/Portfolio/Tonscan"),
+)
+
 
 class DevHandler(http.server.SimpleHTTPRequestHandler):
     extensions_map = {
@@ -40,7 +56,13 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
     def end_headers(self):
-        self.send_header("Cache-Control", "no-store, must-revalidate")
+        path = self.path.split("?", 1)[0].lower()
+        is_html = path.endswith(".html") or path in ("/", "")
+        if is_html:
+            self.send_header("Cache-Control", "no-cache, must-revalidate")
+        else:
+            # Dev-only: reuse images/fonts/video for a few minutes between navigations.
+            self.send_header("Cache-Control", "public, max-age=300")
         super().end_headers()
 
     def translate_path(self, path: str) -> str:
@@ -52,10 +74,18 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
             alt = os.path.join(DUNE_CLIPS_DIR, parts[1])
             if os.path.isfile(alt):
                 return os.path.abspath(alt)
+        if len(parts) == 2 and parts[0] == "tonscan":
+            requested = parts[1]
+            for base in _TONSCAN_ASSET_DIRS:
+                alt = os.path.join(base, requested)
+                if os.path.isfile(alt):
+                    return os.path.abspath(alt)
         return super().translate_path(path)
 
 
-class ReusableTCPServer(socketserver.TCPServer):
+class DevThreadingHTTPServer(http.server.ThreadingHTTPServer):
+    """Same as ThreadingHTTPServer but SO_REUSEADDR so restarts are painless."""
+
     allow_reuse_address = True
 
 
@@ -65,7 +95,7 @@ if __name__ == "__main__":
     port_used = None
     for port in range(start, start + PORT_TRIES):
         try:
-            httpd = ReusableTCPServer(("", port), DevHandler)
+            httpd = DevThreadingHTTPServer(("", port), DevHandler)
             port_used = port
             break
         except OSError as e:
