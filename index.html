@@ -297,10 +297,15 @@
       box-sizing: border-box;
       overflow: hidden;
       opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      background: #000;
       transition: opacity 1.2s ease-in-out;
     }
     #selected-work .carousel-slide.active {
       opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
       z-index: 1;
     }
     #selected-work .carousel-slide img,
@@ -311,12 +316,9 @@
       object-position: center;
       display: block;
     }
-    /* Tonscan: avoid upscaling artifacts by not forcing full cover */
-    #selected-work .carousel-slide.is-tonscan {
+    /* Avoid odd flash frames while videos load */
+    #selected-work .carousel-slide video {
       background: #000;
-    }
-    #selected-work .carousel-slide.is-tonscan video {
-      object-fit: contain;
     }
 
     /* About — one grid so “Skills” lines up with the list column at all widths */
@@ -633,9 +635,6 @@
           <div class="carousel-slide">
             <video src="homepage/carbo-culture.mp4" autoplay muted loop playsinline preload="metadata"></video>
           </div>
-          <div class="carousel-slide is-tonscan">
-            <video src="homepage/tonscan.mov" autoplay muted loop playsinline preload="metadata"></video>
-          </div>
         </div>
       </div>
       <p class="hp-animate explore-work-callout"><a href="work.html">Explore work →</a></p>
@@ -702,7 +701,7 @@
         slides[current].classList.remove('active');
         current = (current + 1) % total;
         slides[current].classList.add('active');
-      }, 3000);
+      }, 5200);
     })();
 
     (function() {
