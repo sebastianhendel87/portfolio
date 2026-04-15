@@ -221,6 +221,13 @@
     .media-tile--contain.media-tile--nav img {
       object-position: center;
     }
+    /* Keep Tonscan top bar/logo visible */
+    .media-tile--account img {
+      object-position: left top;
+    }
+    .media-tile--validation img {
+      object-position: center top;
+    }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
     .media-tile__inner {
@@ -478,10 +485,10 @@
     </div>
 
     <div class="media-row">
-      <div class="media-tile media-tile--contain">
+      <div class="media-tile media-tile--contain media-tile--account">
         <img src="tonscan/account.png" alt="Tonscan — account view">
       </div>
-      <div class="media-tile media-tile--nav media-tile--contain">
+      <div class="media-tile media-tile--nav media-tile--contain media-tile--validation">
         <img src="tonscan/Validation%20light%20mode.png" alt="Tonscan — validation timeline (light mode)">
       </div>
     </div>
