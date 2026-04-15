@@ -297,16 +297,26 @@
       box-sizing: border-box;
       overflow: hidden;
       opacity: 0;
-      visibility: hidden;
+      visibility: visible;
       pointer-events: none;
       background: #000;
-      transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 1.9s ease;
+      will-change: opacity;
     }
     #selected-work .carousel-slide.active {
       opacity: 1;
-      visibility: visible;
       pointer-events: auto;
       z-index: 1;
+    }
+    #selected-work .carousel-slide.is-leaving {
+      opacity: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #selected-work .carousel-slide {
+        transition: none;
+      }
     }
     #selected-work .carousel-slide img,
     #selected-work .carousel-slide video {
@@ -697,6 +707,7 @@
       var slides = Array.prototype.slice.call(document.querySelectorAll('#selected-work .carousel-slide'));
       var total = slides.length;
       var current = 0;
+      var fadeMs = 1900;
 
       function msForSlide(slide) {
         var v = slide.querySelector('video');
@@ -705,14 +716,23 @@
       }
 
       function setActive(next) {
-        slides[current].classList.remove('active');
+        var leaving = slides[current];
+        leaving.classList.add('is-leaving');
+        leaving.classList.remove('active');
         current = (next + total) % total;
         slides[current].classList.add('active');
+        window.setTimeout(function() {
+          leaving.classList.remove('is-leaving');
+        }, fadeMs + 60);
       }
 
       function tick() {
         setActive(current + 1);
         window.setTimeout(tick, msForSlide(slides[current]));
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
       }
 
       window.setTimeout(tick, msForSlide(slides[current]));
