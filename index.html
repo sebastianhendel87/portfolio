@@ -718,6 +718,7 @@
       var durations = { spotify: 3000 };
       var idx = 0;
       var fadeMs = 1200;
+      var videoTailTrimMs = 650; // skip end-of-video dark tail
 
       function getLayer(key) {
         return stage.querySelector('.sequence-layer[data-seq=\"' + key + '\"]');
@@ -753,11 +754,27 @@
           done = true;
           v.removeEventListener('playing', finish);
           v.removeEventListener('canplay', finish);
+          v.removeEventListener('timeupdate', onTime);
+          v.removeEventListener('loadedmetadata', onMeta);
           cb();
+        }
+
+        function onMeta() {
+          // Some exports start on a near-black first frame; nudge forward slightly.
+          try {
+            if (v.currentTime === 0) v.currentTime = 0.04;
+          } catch (e) {}
+        }
+
+        function onTime() {
+          // Only consider it “ready” once frames are actually advancing.
+          if (v.currentTime > 0.03 && !v.paused) finish();
         }
 
         v.addEventListener('playing', finish, { once: true });
         v.addEventListener('canplay', finish, { once: true });
+        v.addEventListener('loadedmetadata', onMeta, { once: true });
+        v.addEventListener('timeupdate', onTime);
 
         // Kick playback; if browser blocks, we'll still fade to the next layer.
         try {
@@ -767,14 +784,14 @@
           finish();
         }
 
-        window.setTimeout(finish, 700);
+        window.setTimeout(finish, 1000);
       }
 
       function msForLayer(key, layer) {
         if (durations[key]) return durations[key];
         var v = layer ? layer.querySelector('video') : null;
         if (v && isFinite(v.duration) && v.duration > 0) {
-          return Math.round(v.duration * 1000);
+          return Math.max(0, Math.round(v.duration * 1000) - videoTailTrimMs);
         }
         // Fallback if metadata isn't ready yet
         return 3000;
