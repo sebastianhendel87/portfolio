@@ -211,22 +211,32 @@
     .media-tile--nav img {
       object-position: top center;
     }
+    /* For UI screens: keep whole frame visible with breathing room */
+    .media-tile--contain {
+      background: var(--surface);
+    }
+    .media-tile--contain img {
+      object-fit: contain;
+      padding: clamp(10px, 1.6vw, 18px);
+      box-sizing: border-box;
+    }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
     .media-tile__inner {
       position: absolute;
       inset: 0;
       overflow: hidden;
-      background: var(--bg);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(10px, 1.6vw, 18px);
+      box-sizing: border-box;
     }
     .media-tile--video video {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: calc(100% + 12px);
-      height: calc(100% + 12px);
-      transform: translate(-50%, -50%);
-      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
       object-position: center;
       border: 0;
       outline: none;
@@ -472,10 +482,10 @@
     </div>
 
     <div class="media-row">
-      <div class="media-tile">
+      <div class="media-tile media-tile--contain">
         <img src="tonscan/account.png" alt="Tonscan — account view">
       </div>
-      <div class="media-tile media-tile--nav">
+      <div class="media-tile media-tile--nav media-tile--contain">
         <img src="tonscan/Validation%20light%20mode.png" alt="Tonscan — validation timeline (light mode)">
       </div>
     </div>
