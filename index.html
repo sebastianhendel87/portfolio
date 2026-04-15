@@ -300,7 +300,7 @@
       visibility: hidden;
       pointer-events: none;
       background: #000;
-      transition: opacity 1.2s ease-in-out;
+      transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
     #selected-work .carousel-slide.active {
       opacity: 1;
@@ -694,14 +694,28 @@
 
   <script>
     (function() {
-      var slides = document.querySelectorAll('#selected-work .carousel-slide');
+      var slides = Array.prototype.slice.call(document.querySelectorAll('#selected-work .carousel-slide'));
       var total = slides.length;
       var current = 0;
-      setInterval(function() {
+
+      function msForSlide(slide) {
+        var v = slide.querySelector('video');
+        if (v) return 7200; // videos need time to “read”
+        return 3600; // image can be faster
+      }
+
+      function setActive(next) {
         slides[current].classList.remove('active');
-        current = (current + 1) % total;
+        current = (next + total) % total;
         slides[current].classList.add('active');
-      }, 5200);
+      }
+
+      function tick() {
+        setActive(current + 1);
+        window.setTimeout(tick, msForSlide(slides[current]));
+      }
+
+      window.setTimeout(tick, msForSlide(slides[current]));
     })();
 
     (function() {
