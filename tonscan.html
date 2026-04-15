@@ -212,13 +212,10 @@
       object-position: top center;
     }
     /* For UI screens: keep whole frame visible with breathing room */
-    .media-tile--contain {
-      background: var(--surface);
-    }
+    .media-tile--contain { background: var(--bg); }
     .media-tile--contain img {
       object-fit: contain;
-      padding: clamp(10px, 1.6vw, 18px);
-      box-sizing: border-box;
+      padding: 0;
     }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
@@ -226,17 +223,12 @@
       position: absolute;
       inset: 0;
       overflow: hidden;
-      background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(10px, 1.6vw, 18px);
-      box-sizing: border-box;
+      background: var(--bg);
     }
     .media-tile--video video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       object-position: center;
       border: 0;
       outline: none;
