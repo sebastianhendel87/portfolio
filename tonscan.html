@@ -211,11 +211,15 @@
     .media-tile--nav img {
       object-position: top center;
     }
-    /* For UI screens: keep whole frame visible with breathing room */
+    /* UI screens: fill the tile so heights match */
     .media-tile--contain { background: var(--bg); }
     .media-tile--contain img {
-      object-fit: contain;
-      padding: 0;
+      object-fit: cover;
+      object-position: center;
+    }
+    /* Validation looks better centered than top-cropped */
+    .media-tile--contain.media-tile--nav img {
+      object-position: center;
     }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
