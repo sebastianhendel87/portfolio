@@ -266,8 +266,8 @@
       opacity: 1;
     }
 
-    /* Carousel — arrow controlled */
-    #selected-work .carousel {
+    /* Selected work — timed sequence (not a carousel) */
+    #selected-work .sequence {
       position: relative;
       width: 100%;
       max-width: 1600px;
@@ -278,13 +278,14 @@
       contain: paint;
       isolation: isolate;
     }
-    #selected-work .carousel-track {
+    #selected-work .sequence-stage {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
       overflow: hidden;
+      background: #000;
     }
-    #selected-work .carousel-slide {
+    #selected-work .sequence-layer {
       position: absolute;
       top: 0;
       left: 0;
@@ -297,29 +298,22 @@
       box-sizing: border-box;
       overflow: hidden;
       opacity: 0;
-      visibility: visible;
       pointer-events: none;
-      background: #000;
       transition: opacity 1400ms ease-in-out;
       will-change: opacity;
     }
-    #selected-work .carousel-slide.active {
+    #selected-work .sequence-layer.is-active {
       opacity: 1;
       pointer-events: auto;
       z-index: 1;
     }
-    #selected-work .carousel-slide.is-leaving {
-      opacity: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
     @media (prefers-reduced-motion: reduce) {
-      #selected-work .carousel-slide {
+      #selected-work .sequence-layer {
         transition: none;
       }
     }
-    #selected-work .carousel-slide img,
-    #selected-work .carousel-slide video {
+    #selected-work .sequence-layer img,
+    #selected-work .sequence-layer video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -327,54 +321,21 @@
       display: block;
     }
     /* Avoid odd flash frames while videos load */
-    #selected-work .carousel-slide video {
+    #selected-work .sequence-layer video {
       background: #000;
     }
-
-    #selected-work .carousel-controls {
+    #selected-work .sequence-black {
       position: absolute;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #000;
+      opacity: 0;
       pointer-events: none;
-      padding: 12px;
-      z-index: 3;
+      transition: opacity 900ms ease-in-out;
+      z-index: 2;
     }
-    #selected-work .carousel-btn {
-      pointer-events: auto;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(0, 0, 0, 0.35);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-    #selected-work .carousel-btn:hover {
-      background: rgba(0, 0, 0, 0.5);
-      border-color: rgba(255, 255, 255, 0.28);
-      transform: scale(1.02);
-    }
-    #selected-work .carousel-btn:active {
-      transform: scale(0.98);
-    }
-    #selected-work .carousel-btn:focus-visible {
-      outline: 2px solid #fff;
-      outline-offset: 3px;
-    }
-    @media (max-width: 768px) {
-      #selected-work .carousel-controls {
-        padding: 10px;
-      }
-      #selected-work .carousel-btn {
-        width: 38px;
-        height: 38px;
+    @media (prefers-reduced-motion: reduce) {
+      #selected-work .sequence-black {
+        transition: none;
       }
     }
 
@@ -681,25 +642,18 @@
   <section id="selected-work" class="hp-scroll-module">
     <div class="container">
       <h2 class="hp-animate hp-section-heading">Selected work</h2>
-      <div class="carousel hp-animate">
-        <div class="carousel-track">
-          <div class="carousel-slide active">
-            <video src="homepage/dune.mp4" autoplay muted loop playsinline preload="metadata"></video>
+      <div class="sequence hp-animate" aria-label="Selected work sequence">
+        <div class="sequence-stage">
+          <div class="sequence-layer is-active" data-seq="dune">
+            <video src="homepage/dune.mp4" autoplay muted loop playsinline preload="auto"></video>
           </div>
-          <div class="carousel-slide">
+          <div class="sequence-layer" data-seq="spotify">
             <img src="homepage/spotify.png" alt="Spotify — selected work">
           </div>
-          <div class="carousel-slide">
-            <video src="homepage/carbo-culture.mp4" autoplay muted loop playsinline preload="metadata"></video>
+          <div class="sequence-layer" data-seq="carbo">
+            <video src="homepage/carbo-culture.mp4" autoplay muted loop playsinline preload="auto"></video>
           </div>
-        </div>
-        <div class="carousel-controls" aria-hidden="false">
-          <button class="carousel-btn" type="button" data-carousel-prev aria-label="Previous slide">
-            <span aria-hidden="true">←</span>
-          </button>
-          <button class="carousel-btn" type="button" data-carousel-next aria-label="Next slide">
-            <span aria-hidden="true">→</span>
-          </button>
+          <div class="sequence-black" aria-hidden="true"></div>
         </div>
       </div>
       <p class="hp-animate explore-work-callout"><a href="work.html">Explore work →</a></p>
@@ -762,54 +716,79 @@
       var root = document.querySelector('#selected-work');
       if (!root) return;
 
-      var slides = Array.prototype.slice.call(root.querySelectorAll('.carousel-slide'));
-      var total = slides.length;
-      var current = 0;
-      var fadeMs = 1400;
+      var stage = root.querySelector('.sequence-stage');
+      if (!stage) return;
 
-      var btnPrev = root.querySelector('[data-carousel-prev]');
-      var btnNext = root.querySelector('[data-carousel-next]');
+      var layers = Array.prototype.slice.call(stage.querySelectorAll('.sequence-layer'));
+      var black = stage.querySelector('.sequence-black');
+      if (!layers.length) return;
 
-      function setActive(next) {
-        var leaving = slides[current];
-        leaving.classList.add('is-leaving');
-        leaving.classList.remove('active');
-
-        current = (next + total) % total;
-        slides[current].classList.add('active');
-
-        window.setTimeout(function() {
-          leaving.classList.remove('is-leaving');
-        }, fadeMs + 60);
-      }
-
-      function prev() { setActive(current - 1); }
-      function next() { setActive(current + 1); }
-
-      function tick() {
-        next();
-        window.setTimeout(tick, 3000);
-      }
-
-      if (btnPrev) btnPrev.addEventListener('click', prev);
-      if (btnNext) btnNext.addEventListener('click', next);
-
-      // Keyboard support: arrows + Space/Enter on focused buttons
-      root.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
-      });
-
-      // Ensure only the active slide can be interacted with
-      slides.forEach(function(slide, i) {
-        if (i === 0) slide.classList.add('active');
-        else slide.classList.remove('active');
-      });
-
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduce) {
+        // No auto sequence when reduced motion is enabled.
         return;
       }
-      window.setTimeout(tick, 3000);
+
+      var order = ['dune', 'spotify', 'carbo'];
+      var durations = { dune: 5000, spotify: 3000, carbo: 6000 };
+      var idx = 0;
+      var fadeMs = 1400;
+      var blackMs = 650; // subtle “breath” between items
+
+      function getLayer(key) {
+        return stage.querySelector('.sequence-layer[data-seq=\"' + key + '\"]');
+      }
+
+      function pauseVideo(layer) {
+        var v = layer ? layer.querySelector('video') : null;
+        if (!v) return;
+        try { v.pause(); } catch (e) {}
+      }
+
+      function playVideo(layer) {
+        var v = layer ? layer.querySelector('video') : null;
+        if (!v) return;
+        try {
+          v.currentTime = 0;
+          var p = v.play();
+          if (p && typeof p.catch === 'function') p.catch(function() {});
+        } catch (e) {}
+      }
+
+      function setActive(key) {
+        layers.forEach(function(layer) {
+          layer.classList.toggle('is-active', layer.getAttribute('data-seq') === key);
+        });
+      }
+
+      function step() {
+        var currentKey = order[idx % order.length];
+        var nextKey = order[(idx + 1) % order.length];
+        var currentLayer = getLayer(currentKey);
+        var nextLayer = getLayer(nextKey);
+
+        // Ensure next video is ready to show.
+        playVideo(nextLayer);
+
+        window.setTimeout(function() {
+          // Optional subtle fade to black between items.
+          if (black) black.style.opacity = '1';
+
+          window.setTimeout(function() {
+            // Switch visible layer while black is up, then fade black away.
+            pauseVideo(currentLayer);
+            setActive(nextKey);
+            if (black) black.style.opacity = '0';
+            idx++;
+            window.setTimeout(step, durations[nextKey] || 3000);
+          }, blackMs);
+        }, Math.max(0, (durations[currentKey] || 3000) - fadeMs));
+      }
+
+      // Start: make sure first video is playing.
+      setActive(order[0]);
+      playVideo(getLayer(order[0]));
+      window.setTimeout(step, durations[order[0]]);
     })();
 
     (function() {
