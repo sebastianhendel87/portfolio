@@ -718,7 +718,7 @@
       var durations = { spotify: 3000 };
       var idx = 0;
       var fadeMs = 1200;
-      var videoTailTrimMs = 650; // skip end-of-video dark tail
+      var videoTailTrimMs = 1400; // skip end-of-video “stalled” tail sooner
 
       function getLayer(key) {
         return stage.querySelector('.sequence-layer[data-seq=\"' + key + '\"]');
@@ -797,6 +797,32 @@
         return 3000;
       }
 
+      function waitUntilVideoNearEnd(layer, cb) {
+        var v = layer ? layer.querySelector('video') : null;
+        if (!v) return cb();
+
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          v.removeEventListener('timeupdate', onTime);
+          v.removeEventListener('ended', finish);
+          cb();
+        }
+
+        function onTime() {
+          if (!isFinite(v.duration) || v.duration <= 0) return;
+          var remainingMs = (v.duration - v.currentTime) * 1000;
+          if (remainingMs <= (videoTailTrimMs + fadeMs)) finish();
+        }
+
+        v.addEventListener('timeupdate', onTime);
+        v.addEventListener('ended', finish, { once: true });
+
+        // Safety: if metadata is missing, fall back to a timer
+        window.setTimeout(finish, Math.max(0, msForLayer('', layer) - fadeMs));
+      }
+
       function step() {
         var currentKey = order[idx % order.length];
         var nextKey = order[(idx + 1) % order.length];
@@ -806,10 +832,7 @@
         // Prepare next media (videos start from 0 and play once)
         resetVideo(nextLayer);
 
-        var holdMs = msForLayer(currentKey, currentLayer);
-        var switchAt = Math.max(0, holdMs - fadeMs);
-
-        window.setTimeout(function() {
+        function doSwitch() {
           whenVideoReadyToShow(nextLayer, function() {
             // Cross-fade: show next, then pause previous after fade completes
             setActive(nextKey);
@@ -819,7 +842,16 @@
               window.setTimeout(step, msForLayer(nextKey, nextLayer));
             }, fadeMs + 60);
           });
-        }, switchAt);
+        }
+
+        // If current is a video, switch based on real playback time to avoid “stalled” tails.
+        if (currentLayer && currentLayer.querySelector('video')) {
+          waitUntilVideoNearEnd(currentLayer, doSwitch);
+          return;
+        }
+
+        // Otherwise (Spotify image), use the fixed duration.
+        window.setTimeout(doSwitch, Math.max(0, (durations[currentKey] || 3000) - fadeMs));
       }
 
       // Start: make sure first video is playing.
