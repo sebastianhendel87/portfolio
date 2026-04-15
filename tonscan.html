@@ -214,12 +214,15 @@
     /* UI screens: fill the tile so both sides match height */
     .media-tile--contain { background: #fff; }
     .media-tile--contain img {
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
     }
     /* Keep top bar/logo visible on both */
     /* Fine-tuned horizontal framing to avoid cropping key UI labels */
-    .media-tile--account img { object-position: 62% top; }
+    .media-tile--account img {
+      object-fit: contain;
+      object-position: center top;
+    }
     .media-tile--validation img { object-position: 74% top; }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
