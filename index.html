@@ -324,20 +324,7 @@
     #selected-work .sequence-layer video {
       background: #000;
     }
-    #selected-work .sequence-black {
-      position: absolute;
-      inset: 0;
-      background: #000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 900ms ease-in-out;
-      z-index: 2;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      #selected-work .sequence-black {
-        transition: none;
-      }
-    }
+    /* No black overlay; cross-fade only (prevents flicker) */
 
     /* About — one grid so “Skills” lines up with the list column at all widths */
     #about .about-grid {
@@ -645,15 +632,14 @@
       <div class="sequence hp-animate" aria-label="Selected work sequence">
         <div class="sequence-stage">
           <div class="sequence-layer is-active" data-seq="dune">
-            <video src="homepage/dune.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="homepage/dune.mp4" autoplay muted playsinline preload="auto"></video>
           </div>
           <div class="sequence-layer" data-seq="spotify">
             <img src="homepage/spotify.png" alt="Spotify — selected work">
           </div>
           <div class="sequence-layer" data-seq="carbo">
-            <video src="homepage/carbo-culture.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="homepage/carbo-culture.mp4" autoplay muted playsinline preload="auto"></video>
           </div>
-          <div class="sequence-black" aria-hidden="true"></div>
         </div>
       </div>
       <p class="hp-animate explore-work-callout"><a href="work.html">Explore work →</a></p>
@@ -720,7 +706,6 @@
       if (!stage) return;
 
       var layers = Array.prototype.slice.call(stage.querySelectorAll('.sequence-layer'));
-      var black = stage.querySelector('.sequence-black');
       if (!layers.length) return;
 
       var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -730,10 +715,9 @@
       }
 
       var order = ['dune', 'spotify', 'carbo'];
-      var durations = { dune: 5000, spotify: 3000, carbo: 6000 };
+      var durations = { spotify: 3000 };
       var idx = 0;
-      var fadeMs = 1400;
-      var blackMs = 650; // subtle “breath” between items
+      var fadeMs = 1200;
 
       function getLayer(key) {
         return stage.querySelector('.sequence-layer[data-seq=\"' + key + '\"]');
@@ -745,13 +729,11 @@
         try { v.pause(); } catch (e) {}
       }
 
-      function playVideo(layer) {
+      function resetVideo(layer) {
         var v = layer ? layer.querySelector('video') : null;
         if (!v) return;
         try {
           v.currentTime = 0;
-          var p = v.play();
-          if (p && typeof p.catch === 'function') p.catch(function() {});
         } catch (e) {}
       }
 
@@ -761,34 +743,74 @@
         });
       }
 
+      function whenVideoReadyToShow(layer, cb) {
+        var v = layer ? layer.querySelector('video') : null;
+        if (!v) return cb();
+
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          v.removeEventListener('playing', finish);
+          v.removeEventListener('canplay', finish);
+          cb();
+        }
+
+        v.addEventListener('playing', finish, { once: true });
+        v.addEventListener('canplay', finish, { once: true });
+
+        // Kick playback; if browser blocks, we'll still fade to the next layer.
+        try {
+          var p = v.play();
+          if (p && typeof p.catch === 'function') p.catch(function() { finish(); });
+        } catch (e) {
+          finish();
+        }
+
+        window.setTimeout(finish, 700);
+      }
+
+      function msForLayer(key, layer) {
+        if (durations[key]) return durations[key];
+        var v = layer ? layer.querySelector('video') : null;
+        if (v && isFinite(v.duration) && v.duration > 0) {
+          return Math.round(v.duration * 1000);
+        }
+        // Fallback if metadata isn't ready yet
+        return 3000;
+      }
+
       function step() {
         var currentKey = order[idx % order.length];
         var nextKey = order[(idx + 1) % order.length];
         var currentLayer = getLayer(currentKey);
         var nextLayer = getLayer(nextKey);
 
-        // Ensure next video is ready to show.
-        playVideo(nextLayer);
+        // Prepare next media (videos start from 0 and play once)
+        resetVideo(nextLayer);
+
+        var holdMs = msForLayer(currentKey, currentLayer);
+        var switchAt = Math.max(0, holdMs - fadeMs);
 
         window.setTimeout(function() {
-          // Optional subtle fade to black between items.
-          if (black) black.style.opacity = '1';
-
-          window.setTimeout(function() {
-            // Switch visible layer while black is up, then fade black away.
-            pauseVideo(currentLayer);
+          whenVideoReadyToShow(nextLayer, function() {
+            // Cross-fade: show next, then pause previous after fade completes
             setActive(nextKey);
-            if (black) black.style.opacity = '0';
-            idx++;
-            window.setTimeout(step, durations[nextKey] || 3000);
-          }, blackMs);
-        }, Math.max(0, (durations[currentKey] || 3000) - fadeMs));
+            window.setTimeout(function() {
+              pauseVideo(currentLayer);
+              idx++;
+              window.setTimeout(step, msForLayer(nextKey, nextLayer));
+            }, fadeMs + 60);
+          });
+        }, switchAt);
       }
 
       // Start: make sure first video is playing.
       setActive(order[0]);
-      playVideo(getLayer(order[0]));
-      window.setTimeout(step, durations[order[0]]);
+      resetVideo(getLayer(order[0]));
+      whenVideoReadyToShow(getLayer(order[0]), function() {
+        window.setTimeout(step, msForLayer(order[0], getLayer(order[0])));
+      });
     })();
 
     (function() {
