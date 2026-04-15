@@ -311,6 +311,13 @@
       object-position: center;
       display: block;
     }
+    /* Tonscan: avoid upscaling artifacts by not forcing full cover */
+    #selected-work .carousel-slide.is-tonscan {
+      background: #000;
+    }
+    #selected-work .carousel-slide.is-tonscan video {
+      object-fit: contain;
+    }
 
     /* About — one grid so “Skills” lines up with the list column at all widths */
     #about .about-grid {
@@ -626,7 +633,7 @@
           <div class="carousel-slide">
             <video src="homepage/carbo-culture.mp4" autoplay muted loop playsinline preload="metadata"></video>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide is-tonscan">
             <video src="homepage/tonscan.mov" autoplay muted loop playsinline preload="metadata"></video>
           </div>
         </div>
