@@ -300,7 +300,7 @@
       visibility: visible;
       pointer-events: none;
       background: #000;
-      transition: opacity 650ms ease;
+      transition: opacity 1400ms ease-in-out;
       will-change: opacity;
     }
     #selected-work .carousel-slide.active {
@@ -765,7 +765,7 @@
       var slides = Array.prototype.slice.call(root.querySelectorAll('.carousel-slide'));
       var total = slides.length;
       var current = 0;
-      var fadeMs = 650;
+      var fadeMs = 1400;
 
       var btnPrev = root.querySelector('[data-carousel-prev]');
       var btnNext = root.querySelector('[data-carousel-next]');
@@ -786,6 +786,11 @@
       function prev() { setActive(current - 1); }
       function next() { setActive(current + 1); }
 
+      function tick() {
+        next();
+        window.setTimeout(tick, 3000);
+      }
+
       if (btnPrev) btnPrev.addEventListener('click', prev);
       if (btnNext) btnNext.addEventListener('click', next);
 
@@ -800,6 +805,11 @@
         if (i === 0) slide.classList.add('active');
         else slide.classList.remove('active');
       });
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+      }
+      window.setTimeout(tick, 3000);
     })();
 
     (function() {
