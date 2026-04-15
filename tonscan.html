@@ -211,11 +211,19 @@
     .media-tile--nav img {
       object-position: top center;
     }
-    /* UI screens: show the full screen (no cropping) */
+    /* UI screens: default = show full screen (no cropping) */
     .media-tile--contain { background: var(--bg); }
     .media-tile--contain img {
       object-fit: contain;
       object-position: center;
+    }
+    /* Account tile: fill the box; keep header/logo visible; pad with white */
+    .media-tile--account {
+      background: #fff;
+    }
+    .media-tile--account img {
+      object-fit: cover;
+      object-position: left top;
     }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
