@@ -211,20 +211,15 @@
     .media-tile--nav img {
       object-position: top center;
     }
-    /* UI screens: default = show full screen (no cropping) */
-    .media-tile--contain { background: var(--bg); }
+    /* UI screens: fill the tile so both sides match height */
+    .media-tile--contain { background: #fff; }
     .media-tile--contain img {
-      object-fit: contain;
+      object-fit: cover;
       object-position: center;
     }
-    /* Account tile: fill the box; keep header/logo visible; pad with white */
-    .media-tile--account {
-      background: #fff;
-    }
-    .media-tile--account img {
-      object-fit: cover;
-      object-position: left top;
-    }
+    /* Keep top bar/logo visible on both */
+    .media-tile--account img { object-position: left top; }
+    .media-tile--validation img { object-position: center top; }
 
     /* Video: overscale + clip inside inner box to hide baked-in edge lines / WebKit hairlines */
     .media-tile__inner {
