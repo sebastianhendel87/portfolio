@@ -1,4 +1,8 @@
 {
+  "version": 2,
+  "builds": [
+    { "src": "**/*", "use": "@vercel/static" }
+  ],
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -9,12 +13,13 @@
       ]
     }
   ],
-  "rewrites": [
-    { "source": "/tonscan", "destination": "/tonscan.html" },
-    { "source": "/dune", "destination": "/dune.html" },
-    { "source": "/spotify", "destination": "/spotify.html" },
-    { "source": "/carbo-culture", "destination": "/carbo-culture.html" },
-    { "source": "/work", "destination": "/work.html" }
+  "routes": [
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "^/tonscan$", "dest": "/tonscan.html" },
+    { "src": "^/dune$", "dest": "/dune.html" },
+    { "src": "^/spotify$", "dest": "/spotify.html" },
+    { "src": "^/carbo-culture$", "dest": "/carbo-culture.html" },
+    { "src": "^/work$", "dest": "/work.html" }
   ]
 }
 
