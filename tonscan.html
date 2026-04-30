@@ -213,9 +213,30 @@
     }
     /* UI screens: fill the tile so both sides match height */
     .media-tile--contain { background: #fff; }
+    /*
+      Some UI exports (or browser scaling) can show a 1px hairline at the right edge.
+      Mask it deterministically with a tiny overlay matching the tile background.
+    */
+    .media-tile--contain::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100%;
+      background: #fff;
+      pointer-events: none;
+    }
     .media-tile--contain img {
       object-fit: contain;
       object-position: center;
+      /*
+        Fix occasional 1px “hairline” at the container edge (subpixel scaling / antialias).
+        We slightly overscan the rendered image inside the clipped tile.
+      */
+      transform: scale(1.008);
+      transform-origin: center;
+      backface-visibility: hidden;
     }
     /* Keep top bar/logo visible on both */
     /* Fine-tuned horizontal framing to avoid cropping key UI labels */
@@ -232,6 +253,18 @@
       overflow: hidden;
       background: var(--bg);
     }
+    /* Deterministically cover any 1px right-edge hairline in the video frames */
+    .media-tile__inner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--bg);
+      pointer-events: none;
+      z-index: 2;
+    }
     .media-tile--video video {
       width: 100%;
       height: 100%;
@@ -241,6 +274,11 @@
       outline: none;
       display: block;
       background: #000;
+      /* Slight overscan + tiny right shift to kill encoded edge lines */
+      transform: translateX(0.5px) scale(1.02);
+      transform-origin: center;
+      will-change: transform;
+      backface-visibility: hidden;
     }
 
     /* Project info module — igual que spotify.html */

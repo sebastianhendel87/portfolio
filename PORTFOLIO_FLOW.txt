@@ -1,0 +1,43 @@
+PORTFOLIO_FLOW.txt — How to open Sebastian’s portfolio locally
+
+GOLDEN RULE
+- Your real portfolio site is STATIC HTML in the repo root (index.html, work.html, etc.)
+- The Next.js site under src/ is just a template right now (it shows the default Next page)
+
+--------------------------------------------
+OPEN THE REAL PORTFOLIO (STATIC HTML) ✅
+
+1) Open Terminal
+
+2) Go to the portfolio folder (copy/paste, then press Enter)
+cd "/Users/sebastianhendel/Library/CloudStorage/GoogleDrive-sebastianhendel@gmail.com/My Drive/07 Personal/Cursor/Sebastian H/Desarrollos/Portfolio personal/portfolio"
+
+3) Start the local server (copy/paste, then press Enter)
+python3 serve.py
+
+4) Terminal will print a link like:
+http://localhost:8877
+(the number may be different)
+
+5) Copy that link into your browser
+
+--------------------------------------------
+IF YOU ACCIDENTALLY OPENED THE NEXT.JS TEMPLATE ❌
+
+If you ran:
+npm run dev
+and you see the default Next.js page:
+
+1) Go to that Terminal window
+2) Press Control + C (stops the server)
+3) Then run the real portfolio steps above (python3 serve.py)
+
+--------------------------------------------
+OPTIONAL SHORTCUT
+
+If you are already inside the portfolio folder, you can also run:
+npm run serve:html
+
+It does the same thing as:
+python3 serve.py
+

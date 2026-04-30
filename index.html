@@ -320,6 +320,10 @@
       object-position: center;
       display: block;
     }
+    /* Spotify still: nudge framing slightly upward */
+    #selected-work .sequence-layer[data-seq="spotify"] img {
+      object-position: center 60%;
+    }
     /* Avoid odd flash frames while videos load */
     #selected-work .sequence-layer video {
       background: #000;
@@ -715,7 +719,8 @@
       }
 
       var order = ['dune', 'spotify', 'carbo'];
-      var durations = { spotify: 3000 };
+      // Show the Spotify still a bit less time (was 3000ms).
+      var durations = { spotify: 2500 };
       var idx = 0;
       var fadeMs = 1200;
       var videoTailTrimMs = 1400; // skip end-of-video “stalled” tail sooner
