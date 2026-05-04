@@ -5,9 +5,10 @@
   "repository": "https://github.com/sebastianhendel87/portfolio",
   "scripts": {
     "serve:html": "sh ./serve.sh",
-    "dev": "next dev -p 9999",
+    "dev:unlock": "rm -f .next/dev/lock",
+    "dev": "next dev -p 3000 --hostname 127.0.0.1 --webpack",
     "build": "next build",
-    "start": "next start -p 9999",
+    "start": "next start -p 3000 --hostname 127.0.0.1",
     "lint": "eslint"
   },
   "dependencies": {

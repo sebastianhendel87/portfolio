@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Preview in Chrome (localhost:8877)",
+      "label": "Preview in Chrome (localhost:8888)",
       "type": "shell",
       "command": "python3 serve.py",
       "options": {

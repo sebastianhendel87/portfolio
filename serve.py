@@ -19,7 +19,9 @@ import sys
 import urllib.parse
 
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_FIRST_PORT = 8877
+# Default preview port (see PORTFOLIO_FLOW.txt). Not 9999 — Node/Next often leaves
+# processes there; 8888 keeps the static portfolio predictable.
+DEFAULT_FIRST_PORT = 8888
 PORT_TRIES = 30
 
 # Your five Dune clips live here on this Mac (not in Google Drive / not in the repo).

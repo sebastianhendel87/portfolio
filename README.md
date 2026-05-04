@@ -10,13 +10,17 @@ In Terminal, **only** run:
 python3 serve.py
 ```
 
-The script prints the **exact** `http://localhost:…` URL (it picks **8877**, or the next free port if something else is already using it). Open that link in Chrome.
+The script prints the **exact** `http://localhost:…` URL (it tries **8888** first, or the next free port if that one is busy). Open that link in Chrome. If `npm run dev` fails with a lock error, run `npm run dev:unlock` and try again (see `PORTFOLIO_FLOW.txt`).
 
-## Preview on the web (GitHub)
+## Preview on the web
 
-Push your changes, then enable **Settings → Pages → branch `main`, folder `/`**. Site:
+**GitHub Pages** (only after you turn it on): repo **Settings → Pages → Build and deployment → Source: Deploy from a branch** → branch **`main`**, folder **`/` (root)** → Save. After a minute or two the site should be at:
 
 **https://sebastianhendel87.github.io/portfolio/**
+
+If that URL **404s**, Pages is not enabled for this repo yet, or the deploy is still running—check the same Settings page for a green status or error.
+
+**Vercel:** this repo includes `vercel.json` (static build). If you already connected the repo on [vercel.com](https://vercel.com), your live URL is under that project’s **Deployments** (e.g. `something.vercel.app`), not necessarily GitHub Pages.
 
 ---
 

@@ -4,6 +4,32 @@ GOLDEN RULE
 - Your real portfolio site is STATIC HTML in the repo root (index.html, work.html, etc.)
 - The Next.js site under src/ is just a template right now (it shows the default Next page)
 
+PORTS (do not mix these up)
+- http://localhost:8888/ — real portfolio, after `python3 serve.py` or `npm run serve:html` (default; if busy, the terminal prints the next free port).
+- http://127.0.0.1:3000/ — Next.js template only, after `npm run dev`.
+
+While `npm run serve:html` runs, the chosen port is also written to `.preview-port.txt` in this folder.
+
+--------------------------------------------
+TROUBLESHOOTING (read this if “nothing works”)
+
+A) Static site (8888) shows the wrong page or 404
+   Something else may be bound to that port. Use the exact URL printed in the Terminal
+   after you start `python3 serve.py`, or open `.preview-port.txt` while the server runs.
+
+B) `npm run dev` says: Unable to acquire lock … .next/dev/lock
+   1) Stop every other `next dev` for this project (other Terminal tabs): Ctrl+C
+   2) If no dev server is running but the error persists, clear the stale lock:
+      npm run dev:unlock
+   3) Try `npm run dev` again.
+   If it still fails, something is still listening on port 3000 — quit that app or pick
+   another port: `npx next dev -p 3010 --hostname 127.0.0.1 --webpack`
+
+C) Old Node processes on port 9999 (common after experiments)
+   They are NOT your static server. Free the port if you need it for something else:
+   lsof -nP -iTCP:9999 -sTCP:LISTEN
+   Then stop those PIDs from Activity Monitor, or: kill <PID>
+
 --------------------------------------------
 OPEN THE REAL PORTFOLIO (STATIC HTML) ✅
 
@@ -16,8 +42,8 @@ cd "/Users/sebastianhendel/Library/CloudStorage/GoogleDrive-sebastianhendel@gmai
 python3 serve.py
 
 4) Terminal will print a link like:
-http://localhost:8877
-(the number may be different)
+http://localhost:8888/
+(if 8888 is already in use, it picks the next free port — use the exact URL printed)
 
 5) Copy that link into your browser
 
@@ -40,4 +66,3 @@ npm run serve:html
 
 It does the same thing as:
 python3 serve.py
-
