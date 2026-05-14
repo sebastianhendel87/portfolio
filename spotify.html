@@ -100,7 +100,7 @@
     }
     .project-meta {
       position: absolute;
-      right: 40px;
+      right: max(40px, calc((100vw - 1400px) / 2 + 40px));
       top: 50%;
       transform: translateY(calc(-50% + 120px));
       display: flex;
@@ -187,7 +187,8 @@
     }
     .project-info-meta-row {
       display: flex;
-      gap: 48px;
+      flex-direction: column;
+      gap: 32px;
     }
     .project-info-meta-item {
       display: flex;
@@ -204,7 +205,7 @@
       font-size: 14px;
       font-weight: 400;
       color: var(--muted);
-      max-width: 110px;
+      max-width: none;
     }
     .project-info-spacer {
       min-height: 5em;
@@ -382,13 +383,16 @@
     <h1>Spotify</h1>
     <div class="project-meta">
       <div class="project-meta-item">
-        <span class="project-meta-label">Project</span>
-        <span class="project-meta-value">Secondary Layer Tool</span>
+        <span class="project-meta-label">Studio</span>
+        <span class="project-meta-value">Stink Studios</span>
+      </div>
+      <div class="project-meta-item">
+        <span class="project-meta-label">Year</span>
         <span class="project-meta-value">2021</span>
       </div>
       <div class="project-meta-item">
         <span class="project-meta-label">Role</span>
-        <span class="project-meta-value">Project Manager</span>
+        <span class="project-meta-value">Senior Producer</span>
       </div>
     </div>
   </header>
@@ -408,14 +412,13 @@
           </div>
           <div class="project-info-meta-item">
             <span class="label">Work</span>
-            <span class="value">Project management, delivery</span>
+            <span class="value">Production, delivery, cross-team coordination</span>
           </div>
         </div>
         <div class="project-info-meta-item">
           <span class="label">Team</span>
-          <span class="value">Design, Engineering, Product</span>
+          <span class="value">Design, Engineering, Product (Stink + Spotify)</span>
         </div>
-        <div class="project-info-spacer"></div>
       </div>
       <div class="project-info-right">
         <h2>Helping Spotify scale internal tools<br>for cross-team collaboration</h2>
