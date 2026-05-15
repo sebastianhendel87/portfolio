@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preload" as="image" href="homepage/spotify-16x9.png" fetchpriority="high">
+  <link rel="preload" as="image" href="homepage/tonscan-16x9.png">
   <title>Product Manager & Creative Ops | Sebastian Hendel</title>
   <style>
     /* Theme: misma escala, dark por defecto */
@@ -631,13 +633,16 @@
       <div class="sequence hp-animate" aria-label="Selected work sequence">
         <div class="sequence-stage">
           <div class="sequence-layer is-active" data-seq="dune">
-            <video src="homepage/dune.mp4" autoplay muted playsinline preload="auto"></video>
+            <video src="homepage/dune.mp4" poster="homepage/dune-poster.jpg" autoplay muted playsinline preload="auto"></video>
           </div>
           <div class="sequence-layer" data-seq="spotify">
-            <img src="homepage/spotify.png" alt="Spotify selected work">
+            <img src="homepage/spotify-16x9.png" alt="Spotify selected work" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="carbo">
-            <video src="homepage/carbo-culture.mp4" autoplay muted playsinline preload="auto"></video>
+            <video src="homepage/carbo-culture-16x9.mp4" poster="homepage/carbo-culture-16x9-poster.jpg" muted playsinline preload="metadata"></video>
+          </div>
+          <div class="sequence-layer" data-seq="tonscan">
+            <img src="homepage/tonscan-16x9.png" alt="Tonscan selected work" decoding="async">
           </div>
         </div>
       </div>
@@ -705,9 +710,9 @@
         return;
       }
 
-      var order = ['dune', 'spotify', 'carbo'];
-      // Show the Spotify still a bit less time (was 3000ms).
-      var durations = { spotify: 2500 };
+      var order = ['dune', 'spotify', 'carbo', 'tonscan'];
+      // Stills (no video duration to infer) get a fixed dwell time.
+      var durations = { spotify: 2500, tonscan: 2500 };
       var idx = 0;
       var fadeMs = 1200;
       var videoTailTrimMs = 1400; // skip end-of-video “stalled” tail sooner
@@ -738,7 +743,25 @@
 
       function whenVideoReadyToShow(layer, cb) {
         var v = layer ? layer.querySelector('video') : null;
-        if (!v) return cb();
+        if (!v) {
+          var img = layer ? layer.querySelector('img') : null;
+          if (!img) return cb();
+          if (img.complete && img.naturalWidth > 0) return cb();
+          var imgDone = false;
+          function imgFinish() {
+            if (imgDone) return;
+            imgDone = true;
+            cb();
+          }
+          if (typeof img.decode === 'function') {
+            img.decode().then(imgFinish, imgFinish);
+          } else {
+            img.addEventListener('load', imgFinish, { once: true });
+            img.addEventListener('error', imgFinish, { once: true });
+          }
+          window.setTimeout(imgFinish, 800);
+          return;
+        }
 
         var done = false;
         function finish() {

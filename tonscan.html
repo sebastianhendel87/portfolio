@@ -513,7 +513,7 @@
       </div>
       <div class="project-info-right">
         <h2>Building a more accessible explorer for the TON blockchain.</h2>
-        <p>In collaboration with Bastion Digital, we created Tonscan to support a fast-growing ecosystem as it scaled beyond early adopters.</p>
+        <p>We created Tonscan to support a fast-growing TON ecosystem as it scaled beyond early adopters.</p>
         <p>As TON gained traction, its tools struggled to keep up. The challenge was to make complex, low-level blockchain data intuitive, without losing the depth required by more advanced users.</p>
         <p>We approached Tonscan as a system rather than a flow, shaping a flexible structure that supports multiple intents, from quick lookups to deeper exploration.</p>
         <p>Under the hood, a custom indexer and data pipeline process millions of daily transactions in real time, turning raw blockchain data into structured, queryable information.</p>
@@ -533,12 +533,12 @@
     <div class="media-row">
       <div class="media-tile media-tile--video">
         <div class="media-tile__inner">
-          <video src="tonscan/Tonscan%20video%201.mov" autoplay muted loop playsinline preload="metadata"></video>
+          <video src="tonscan/Tonscan%20video%201.mov" poster="tonscan/Tonscan-video-1-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
         </div>
       </div>
       <div class="media-tile media-tile--video">
         <div class="media-tile__inner">
-          <video src="tonscan/Tonscan%20video%202.mov" autoplay muted loop playsinline preload="metadata"></video>
+          <video src="tonscan/Tonscan%20video%202.mov" poster="tonscan/Tonscan-video-2-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
         </div>
       </div>
     </div>
@@ -558,6 +558,41 @@
     <span>© 2026 Sebastian Hendel</span>
     <a href="mailto:sebastianhendel@gmail.com">Contact</a>
   </footer>
+
+  <script>
+    /* Play videos on viewport intersect so Safari / iOS / low-power mode don't leave them paused as black rectangles. */
+    (function () {
+      if (!('IntersectionObserver' in window)) return;
+      var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
+      if (!videos.length) return;
+      if (prefersReduce) {
+        videos.forEach(function (v) { try { v.pause(); } catch (e) {} });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var v = entry.target;
+          if (entry.isIntersecting) {
+            var p = v.play();
+            if (p && typeof p.catch === 'function') p.catch(function () {});
+          } else {
+            try { v.pause(); } catch (e) {}
+          }
+        });
+      }, { threshold: 0.25 });
+      videos.forEach(function (v) { io.observe(v); });
+    })();
+
+    window.addEventListener('pagehide', function (ev) {
+      if (ev.persisted) return;
+      document.querySelectorAll('video').forEach(function (v) {
+        v.pause();
+        v.removeAttribute('src');
+        v.load();
+      });
+    });
+  </script>
 
 </body>
 </html>
