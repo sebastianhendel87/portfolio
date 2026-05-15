@@ -559,12 +559,30 @@
         videos.forEach(function (v) { try { v.pause(); } catch (e) {} });
         return;
       }
+      function tryPlay(v) {
+        try {
+          var p = v.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(function () {
+              // If play() rejected (often because the metadata-only video
+              // hasn't decoded enough frames yet on mobile), kick a load
+              // and retry once the data lands.
+              v.addEventListener('loadeddata', function onReady() {
+                v.removeEventListener('loadeddata', onReady);
+                v.play().catch(function () {});
+              }, { once: true });
+              if (v.preload !== 'auto') {
+                try { v.load(); } catch (e) {}
+              }
+            });
+          }
+        } catch (e) {}
+      }
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           var v = entry.target;
           if (entry.isIntersecting) {
-            var p = v.play();
-            if (p && typeof p.catch === 'function') p.catch(function () {});
+            tryPlay(v);
           } else {
             try { v.pause(); } catch (e) {}
           }

@@ -533,12 +533,12 @@
     <div class="media-row">
       <div class="media-tile media-tile--video">
         <div class="media-tile__inner">
-          <video src="tonscan/Tonscan%20video%201.mov" poster="tonscan/Tonscan-video-1-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+          <video src="tonscan/tonscan-video-1.mp4" poster="tonscan/tonscan-video-1-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
         </div>
       </div>
       <div class="media-tile media-tile--video">
         <div class="media-tile__inner">
-          <video src="tonscan/Tonscan%20video%202.mov" poster="tonscan/Tonscan-video-2-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+          <video src="tonscan/tonscan-video-2.mp4" poster="tonscan/tonscan-video-2-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
         </div>
       </div>
     </div>
@@ -570,12 +570,27 @@
         videos.forEach(function (v) { try { v.pause(); } catch (e) {} });
         return;
       }
+      function tryPlay(v) {
+        try {
+          var p = v.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(function () {
+              v.addEventListener('loadeddata', function onReady() {
+                v.removeEventListener('loadeddata', onReady);
+                v.play().catch(function () {});
+              }, { once: true });
+              if (v.preload !== 'auto') {
+                try { v.load(); } catch (e) {}
+              }
+            });
+          }
+        } catch (e) {}
+      }
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           var v = entry.target;
           if (entry.isIntersecting) {
-            var p = v.play();
-            if (p && typeof p.catch === 'function') p.catch(function () {});
+            tryPlay(v);
           } else {
             try { v.pause(); } catch (e) {}
           }
