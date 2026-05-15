@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preload" as="image" href="homepage/spotify-16x9.png" fetchpriority="high">
+  <link rel="preload" as="image" href="homepage/tonscan-16x9.png">
   <title>Product Manager & Creative Ops | Sebastian Hendel</title>
   <style>
     /* Theme: misma escala, dark por defecto */
@@ -631,13 +633,16 @@
       <div class="sequence hp-animate" aria-label="Selected work sequence">
         <div class="sequence-stage">
           <div class="sequence-layer is-active" data-seq="dune">
-            <video src="homepage/dune.mp4" autoplay muted playsinline preload="auto"></video>
+            <video src="homepage/dune.mp4" poster="homepage/dune-poster.jpg" autoplay muted playsinline preload="auto"></video>
           </div>
           <div class="sequence-layer" data-seq="spotify">
-            <img src="homepage/spotify.png" alt="Spotify selected work">
+            <img src="homepage/spotify-16x9.png" alt="Spotify selected work" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="carbo">
-            <video src="homepage/carbo-culture.mp4" autoplay muted playsinline preload="auto"></video>
+            <video src="homepage/carbo-culture-16x9.mp4" poster="homepage/carbo-culture-16x9-poster.jpg" autoplay muted playsinline preload="auto"></video>
+          </div>
+          <div class="sequence-layer" data-seq="tonscan">
+            <img src="homepage/tonscan-16x9.png" alt="Tonscan selected work" decoding="async">
           </div>
         </div>
       </div>
@@ -699,159 +704,102 @@
       var layers = Array.prototype.slice.call(stage.querySelectorAll('.sequence-layer'));
       if (!layers.length) return;
 
-      var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReduce) {
-        // No auto sequence when reduced motion is enabled.
-        return;
-      }
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      var order = ['dune', 'spotify', 'carbo'];
-      // Show the Spotify still a bit less time (was 3000ms).
-      var durations = { spotify: 2500 };
+      var order = ['dune', 'spotify', 'carbo', 'tonscan'];
+      // How long each layer stays in is-active (includes its CSS fade-in).
+      // Videos: slightly less than their duration so the next fade starts
+      // before the visible tail; stills: short and snappy.
+      var dwellMs = {
+        dune: 4500,
+        spotify: 2500,
+        carbo: 5500,
+        tonscan: 2500
+      };
       var idx = 0;
-      var fadeMs = 1200;
-      var videoTailTrimMs = 1400; // skip end-of-video “stalled” tail sooner
+      var pendingTimer = null;
+      var sectionInView = false;
 
       function getLayer(key) {
-        return stage.querySelector('.sequence-layer[data-seq=\"' + key + '\"]');
+        return stage.querySelector('.sequence-layer[data-seq="' + key + '"]');
       }
 
-      function pauseVideo(layer) {
-        var v = layer ? layer.querySelector('video') : null;
+      function tryPlay(v) {
         if (!v) return;
-        try { v.pause(); } catch (e) {}
-      }
-
-      function resetVideo(layer) {
-        var v = layer ? layer.querySelector('video') : null;
-        if (!v) return;
+        try { v.currentTime = 0; } catch (e) {}
         try {
-          v.currentTime = 0;
+          var p = v.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(function() {
+              v.preload = 'auto';
+              v.addEventListener('loadeddata', function onReady() {
+                v.removeEventListener('loadeddata', onReady);
+                v.play().catch(function() {});
+              }, { once: true });
+              try { v.load(); } catch (e2) {}
+            });
+          }
         } catch (e) {}
       }
 
       function setActive(key) {
         layers.forEach(function(layer) {
-          layer.classList.toggle('is-active', layer.getAttribute('data-seq') === key);
+          var isActive = layer.getAttribute('data-seq') === key;
+          layer.classList.toggle('is-active', isActive);
+          var v = layer.querySelector('video');
+          if (!v) return;
+          if (isActive) tryPlay(v);
+          else { try { v.pause(); } catch (e) {} }
         });
       }
 
-      function whenVideoReadyToShow(layer, cb) {
-        var v = layer ? layer.querySelector('video') : null;
-        if (!v) return cb();
-
-        var done = false;
-        function finish() {
-          if (done) return;
-          done = true;
-          v.removeEventListener('playing', finish);
-          v.removeEventListener('canplay', finish);
-          v.removeEventListener('timeupdate', onTime);
-          v.removeEventListener('loadedmetadata', onMeta);
-          cb();
-        }
-
-        function onMeta() {
-          // Some exports start on a near-black first frame; nudge forward slightly.
-          try {
-            if (v.currentTime === 0) v.currentTime = 0.04;
-          } catch (e) {}
-        }
-
-        function onTime() {
-          // Only consider it “ready” once frames are actually advancing.
-          if (v.currentTime > 0.03 && !v.paused) finish();
-        }
-
-        v.addEventListener('playing', finish, { once: true });
-        v.addEventListener('canplay', finish, { once: true });
-        v.addEventListener('loadedmetadata', onMeta, { once: true });
-        v.addEventListener('timeupdate', onTime);
-
-        // Kick playback; if browser blocks, we'll still fade to the next layer.
-        try {
-          var p = v.play();
-          if (p && typeof p.catch === 'function') p.catch(function() { finish(); });
-        } catch (e) {
-          finish();
-        }
-
-        window.setTimeout(finish, 1000);
+      function schedule(ms) {
+        if (pendingTimer) window.clearTimeout(pendingTimer);
+        pendingTimer = window.setTimeout(function() {
+          pendingTimer = null;
+          if (!sectionInView) return;
+          idx = (idx + 1) % order.length;
+          setActive(order[idx]);
+          schedule(dwellMs[order[idx]] || 3500);
+        }, ms);
       }
 
-      function msForLayer(key, layer) {
-        if (durations[key]) return durations[key];
-        var v = layer ? layer.querySelector('video') : null;
-        if (v && isFinite(v.duration) && v.duration > 0) {
-          return Math.max(0, Math.round(v.duration * 1000) - videoTailTrimMs);
-        }
-        // Fallback if metadata isn't ready yet
-        return 3000;
-      }
-
-      function waitUntilVideoNearEnd(layer, cb) {
-        var v = layer ? layer.querySelector('video') : null;
-        if (!v) return cb();
-
-        var done = false;
-        function finish() {
-          if (done) return;
-          done = true;
-          v.removeEventListener('timeupdate', onTime);
-          v.removeEventListener('ended', finish);
-          cb();
-        }
-
-        function onTime() {
-          if (!isFinite(v.duration) || v.duration <= 0) return;
-          var remainingMs = (v.duration - v.currentTime) * 1000;
-          if (remainingMs <= (videoTailTrimMs + fadeMs)) finish();
-        }
-
-        v.addEventListener('timeupdate', onTime);
-        v.addEventListener('ended', finish, { once: true });
-
-        // Safety: if metadata is missing, fall back to a timer
-        window.setTimeout(finish, Math.max(0, msForLayer('', layer) - fadeMs));
-      }
-
-      function step() {
-        var currentKey = order[idx % order.length];
-        var nextKey = order[(idx + 1) % order.length];
-        var currentLayer = getLayer(currentKey);
-        var nextLayer = getLayer(nextKey);
-
-        // Prepare next media (videos start from 0 and play once)
-        resetVideo(nextLayer);
-
-        function doSwitch() {
-          whenVideoReadyToShow(nextLayer, function() {
-            // Cross-fade: show next, then pause previous after fade completes
-            setActive(nextKey);
-            window.setTimeout(function() {
-              pauseVideo(currentLayer);
-              idx++;
-              window.setTimeout(step, msForLayer(nextKey, nextLayer));
-            }, fadeMs + 60);
-          });
-        }
-
-        // If current is a video, switch based on real playback time to avoid “stalled” tails.
-        if (currentLayer && currentLayer.querySelector('video')) {
-          waitUntilVideoNearEnd(currentLayer, doSwitch);
-          return;
-        }
-
-        // Otherwise (Spotify image), use the fixed duration.
-        window.setTimeout(doSwitch, Math.max(0, (durations[currentKey] || 3000) - fadeMs));
-      }
-
-      // Start: make sure first video is playing.
+      // Bootstrap: the first layer already has is-active in HTML; just kick its video.
       setActive(order[0]);
-      resetVideo(getLayer(order[0]));
-      whenVideoReadyToShow(getLayer(order[0]), function() {
-        window.setTimeout(step, msForLayer(order[0], getLayer(order[0])));
-      });
+
+      var section = document.querySelector('#selected-work');
+      if (!('IntersectionObserver' in window) || !section) {
+        sectionInView = true;
+        schedule(dwellMs[order[0]] || 3500);
+        return;
+      }
+
+      var sectionIO = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !sectionInView) {
+            sectionInView = true;
+            // Kick the active layer's video again when we come back into view.
+            var active = stage.querySelector('.sequence-layer.is-active video');
+            if (active) tryPlay(active);
+            if (!pendingTimer) schedule(dwellMs[order[idx]] || 3500);
+          } else if (!entry.isIntersecting && sectionInView) {
+            sectionInView = false;
+            if (pendingTimer) { window.clearTimeout(pendingTimer); pendingTimer = null; }
+            var paused = stage.querySelector('.sequence-layer.is-active video');
+            if (paused) { try { paused.pause(); } catch (e) {} }
+          }
+        });
+      }, { threshold: 0.1 });
+      sectionIO.observe(section);
+
+      // Safety: if the IO never fires (e.g. some hidden-tab edge cases), still
+      // start the rotation after a few seconds so it isn't permanently stuck.
+      window.setTimeout(function() {
+        if (!sectionInView && !pendingTimer) {
+          sectionInView = true;
+          schedule(dwellMs[order[idx]] || 3500);
+        }
+      }, 6000);
     })();
 
     (function() {

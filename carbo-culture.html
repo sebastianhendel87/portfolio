@@ -490,7 +490,7 @@
     -->
 
     <div id="carbo-hero-video" class="project-image hero hero--video">
-      <video src="carbo-culture/logo-bw.mp4" autoplay muted loop playsinline preload="auto"></video>
+      <video src="carbo-culture/logo-bw.mp4" poster="carbo-culture/logo-bw-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
     </div>
 
     <div class="project-info-module project-info-module--tight">
@@ -532,8 +532,9 @@
     <div id="carbo-video-nature" class="project-image project-image--embed">
       <video
         src="carbo-culture/live_action_nature.mp4"
+        poster="carbo-culture/live_action_nature-poster.jpg"
         autoplay muted loop playsinline
-        preload="auto"
+        preload="metadata"
         aria-label="Carbo Culture: live action (nature)"></video>
     </div>
 
@@ -548,8 +549,9 @@
       <div id="carbo-video-live-action" class="project-image project-image--embed">
         <video
           src="carbo-culture/live_action.mp4"
+          poster="carbo-culture/live_action-poster.jpg"
           autoplay muted loop playsinline
-          preload="auto"
+          preload="metadata"
           aria-label="Carbo Culture: live action"></video>
       </div>
     </div>
@@ -575,6 +577,45 @@
   </footer>
 
   <script>
+    /* Play videos on viewport intersect so Safari / iOS / low-power mode don't leave them paused as black rectangles. */
+    (function () {
+      if (!('IntersectionObserver' in window)) return;
+      var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
+      if (!videos.length) return;
+      if (prefersReduce) {
+        videos.forEach(function (v) { try { v.pause(); } catch (e) {} });
+        return;
+      }
+      function tryPlay(v) {
+        try {
+          var p = v.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(function () {
+              v.addEventListener('loadeddata', function onReady() {
+                v.removeEventListener('loadeddata', onReady);
+                v.play().catch(function () {});
+              }, { once: true });
+              if (v.preload !== 'auto') {
+                try { v.load(); } catch (e) {}
+              }
+            });
+          }
+        } catch (e) {}
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var v = entry.target;
+          if (entry.isIntersecting) {
+            tryPlay(v);
+          } else {
+            try { v.pause(); } catch (e) {}
+          }
+        });
+      }, { threshold: 0.25 });
+      videos.forEach(function (v) { io.observe(v); });
+    })();
+
     /* Drop video decode/network when leaving so the next page is not stuck behind range requests. */
     window.addEventListener('pagehide', function (ev) {
       if (ev.persisted) return;
