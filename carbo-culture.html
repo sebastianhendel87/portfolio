@@ -577,20 +577,29 @@
   </footer>
 
   <script>
-    /* Unlock playback on the first user gesture: iOS Chrome / Safari often refuse autoplay
-       (Low Power Mode, heuristic refusal) but always honor play() inside a user gesture. */
+    /* Retry play() on every user gesture so iOS WebKit unlocks playback the first
+       time it can (initial autoplay refusal, Low Power Mode, or a later scroll past
+       a fresh video). Throttled to one run per animation frame. */
     (function () {
-      var fired = false;
       var evs = ['touchstart', 'pointerdown', 'click', 'scroll', 'keydown'];
-      var kick = function () {
-        if (fired) return;
-        fired = true;
-        evs.forEach(function (e) { document.removeEventListener(e, kick, true); });
+      var pending = false;
+      var run = function () {
+        pending = false;
         document.querySelectorAll('video').forEach(function (v) {
+          if (!v.paused) return;
           var r = v.getBoundingClientRect();
-          var visible = r.bottom > 0 && r.top < (window.innerHeight || 0);
-          if (visible) { try { v.play().catch(function () {}); } catch (e) {} }
+          var inViewport = r.bottom > 0 && r.top < (window.innerHeight || 0);
+          if (!inViewport) return;
+          var parent = v.parentElement;
+          if (parent && parseFloat(window.getComputedStyle(parent).opacity || '1') < 0.5) return;
+          try { v.play().catch(function () {}); } catch (e) {}
         });
+      };
+      var kick = function () {
+        if (pending) return;
+        pending = true;
+        if (window.requestAnimationFrame) requestAnimationFrame(run);
+        else setTimeout(run, 16);
       };
       evs.forEach(function (e) {
         document.addEventListener(e, kick, { capture: true, passive: true });
