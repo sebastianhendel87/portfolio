@@ -694,6 +694,24 @@
   </footer>
 
   <script>
+    (function () {
+      var fired = false;
+      var evs = ['touchstart', 'pointerdown', 'click', 'scroll', 'keydown'];
+      var kick = function () {
+        if (fired) return;
+        fired = true;
+        evs.forEach(function (e) { document.removeEventListener(e, kick, true); });
+        document.querySelectorAll('video').forEach(function (v) {
+          var r = v.getBoundingClientRect();
+          var visible = r.bottom > 0 && r.top < (window.innerHeight || 0);
+          if (visible) { try { v.play().catch(function () {}); } catch (e) {} }
+        });
+      };
+      evs.forEach(function (e) {
+        document.addEventListener(e, kick, { capture: true, passive: true });
+      });
+    })();
+
     (function() {
       var root = document.querySelector('#selected-work');
       if (!root) return;
@@ -703,8 +721,6 @@
 
       var layers = Array.prototype.slice.call(stage.querySelectorAll('.sequence-layer'));
       if (!layers.length) return;
-
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       var order = ['dune', 'spotify', 'carbo', 'tonscan'];
       // How long each layer stays in is-active (includes its CSS fade-in).
@@ -726,18 +742,19 @@
 
       function tryPlay(v) {
         if (!v) return;
-        try { v.currentTime = 0; } catch (e) {}
+        if (v.dataset.played === '1') { try { v.currentTime = 0; } catch (e) {} }
         try {
           var p = v.play();
-          if (p && typeof p.catch === 'function') {
-            p.catch(function() {
-              v.preload = 'auto';
-              v.addEventListener('loadeddata', function onReady() {
-                v.removeEventListener('loadeddata', onReady);
-                v.play().catch(function() {});
-              }, { once: true });
-              try { v.load(); } catch (e2) {}
-            });
+          if (p && typeof p.then === 'function') {
+            p.then(function () { v.dataset.played = '1'; })
+             .catch(function () {
+               var onReady = function () {
+                 v.removeEventListener('canplay', onReady);
+                 v.play().then(function () { v.dataset.played = '1'; }).catch(function () {});
+               };
+               v.addEventListener('canplay', onReady, { once: true });
+               if (v.preload !== 'auto') { try { v.load(); } catch (e) {} }
+             });
           }
         } catch (e) {}
       }
@@ -751,6 +768,11 @@
           if (isActive) tryPlay(v);
           else { try { v.pause(); } catch (e) {} }
         });
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setActive(order[0]);
+        return;
       }
 
       function schedule(ms) {

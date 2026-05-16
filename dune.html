@@ -549,31 +549,42 @@
   </footer>
 
   <script>
+    /* Unlock playback on the first user gesture: iOS Chrome / Safari often refuse autoplay
+       (Low Power Mode, heuristic refusal) but always honor play() inside a user gesture. */
+    (function () {
+      var fired = false;
+      var evs = ['touchstart', 'pointerdown', 'click', 'scroll', 'keydown'];
+      var kick = function () {
+        if (fired) return;
+        fired = true;
+        evs.forEach(function (e) { document.removeEventListener(e, kick, true); });
+        document.querySelectorAll('video').forEach(function (v) {
+          var r = v.getBoundingClientRect();
+          var visible = r.bottom > 0 && r.top < (window.innerHeight || 0);
+          if (visible) { try { v.play().catch(function () {}); } catch (e) {} }
+        });
+      };
+      evs.forEach(function (e) {
+        document.addEventListener(e, kick, { capture: true, passive: true });
+      });
+    })();
+
     /* Play videos on viewport intersect so Safari / iOS / low-power mode don't leave them paused as black rectangles. */
     (function () {
       if (!('IntersectionObserver' in window)) return;
-      var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
       if (!videos.length) return;
-      if (prefersReduce) {
-        videos.forEach(function (v) { try { v.pause(); } catch (e) {} });
-        return;
-      }
       function tryPlay(v) {
         try {
           var p = v.play();
           if (p && typeof p.catch === 'function') {
             p.catch(function () {
-              // If play() rejected (often because the metadata-only video
-              // hasn't decoded enough frames yet on mobile), kick a load
-              // and retry once the data lands.
-              v.addEventListener('loadeddata', function onReady() {
-                v.removeEventListener('loadeddata', onReady);
+              var onReady = function () {
+                v.removeEventListener('canplay', onReady);
                 v.play().catch(function () {});
-              }, { once: true });
-              if (v.preload !== 'auto') {
-                try { v.load(); } catch (e) {}
-              }
+              };
+              v.addEventListener('canplay', onReady, { once: true });
+              if (v.preload !== 'auto') { try { v.load(); } catch (e) {} }
             });
           }
         } catch (e) {}
