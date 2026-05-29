@@ -43,6 +43,11 @@
       --home-y-tight: 12px;
       --home-footer-bottom: 20px;
       --nav-scroll-pad: 96px;
+      /* Centered page column: below ~1664px this resolves to the base 32px gutter
+         (laptop/mobile unchanged); above it the gutter grows so nav, hero and
+         Contact stay centered as one column instead of drifting on wide screens. */
+      --page-max: 1600px;
+      --page-gutter: max(32px, calc((100vw - var(--page-max)) / 2));
     }
     @media (max-width: 768px) {
       :root {
@@ -75,7 +80,7 @@
       left: 0;
       right: 0;
       z-index: 100;
-      padding: 32px 40px;
+      padding: 32px var(--page-gutter);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -138,7 +143,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      padding: 0 32px;
+      padding: 0 var(--page-gutter);
       text-align: left;
     }
     .hero .container {
@@ -182,7 +187,7 @@
     .hero .hero-contact {
       position: absolute;
       bottom: 32px;
-      left: 32px;
+      left: var(--page-gutter);
       font-size: 14px;
       padding: 0;
       line-height: 1.45;
