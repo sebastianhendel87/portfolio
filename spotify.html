@@ -159,6 +159,12 @@
     .project-image.hero {
       aspect-ratio: 16/10;
     }
+    /* Image is 16/9; cover-fill the 16/10 box so no grey strip shows below it. */
+    .project-image.hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .project-image.full {
       aspect-ratio: 21/9;
     }
