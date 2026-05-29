@@ -145,6 +145,11 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      /* Left-anchor the hero copy with the nav name and Contact block.
+         Without this the centered container floats the headline to mid-screen on wide viewports. */
+      max-width: none;
+      margin: 0;
+      padding: 0;
     }
     .hero .tagline {
       font-size: clamp(19px, 2.4vw, 24px);
