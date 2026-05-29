@@ -43,11 +43,6 @@
       --home-y-tight: 12px;
       --home-footer-bottom: 20px;
       --nav-scroll-pad: 96px;
-      /* Centered page column: below ~1664px this resolves to the base 32px gutter
-         (laptop/mobile unchanged); above it the gutter grows so nav, hero and
-         Contact stay centered as one column instead of drifting on wide screens. */
-      --page-max: 1600px;
-      --page-gutter: max(32px, calc((100vw - var(--page-max)) / 2));
     }
     @media (max-width: 768px) {
       :root {
@@ -80,7 +75,7 @@
       left: 0;
       right: 0;
       z-index: 100;
-      padding: 32px var(--page-gutter);
+      padding: 32px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -143,18 +138,13 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      padding: 0 var(--page-gutter);
+      padding: 0 32px;
       text-align: left;
     }
     .hero .container {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      /* Left-anchor the hero copy with the nav name and Contact block.
-         Without this the centered container floats the headline to mid-screen on wide viewports. */
-      max-width: none;
-      margin: 0;
-      padding: 0;
     }
     .hero .tagline {
       font-size: clamp(19px, 2.4vw, 24px);
@@ -183,11 +173,21 @@
       letter-spacing: -0.01em;
       opacity: 0.72;
     }
+    /* Large screens: scale the hero type up so the centered block has presence
+       instead of floating small in the canvas (matches the reference). */
+    @media (min-width: 1440px) {
+      .hero .hero-copy,
+      .hero .hero-copy-sub {
+        font-size: clamp(48px, 3.4vw, 60px);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+      }
+    }
     /* Contact — bottom-left on hero (above the fold) */
     .hero .hero-contact {
       position: absolute;
       bottom: 32px;
-      left: var(--page-gutter);
+      left: 32px;
       font-size: 14px;
       padding: 0;
       line-height: 1.45;
