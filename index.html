@@ -173,6 +173,16 @@
       letter-spacing: -0.01em;
       opacity: 0.72;
     }
+    /* Large screens: scale the hero type up so the centered block has presence
+       instead of floating small in the canvas (matches the reference). */
+    @media (min-width: 1440px) {
+      .hero .hero-copy,
+      .hero .hero-copy-sub {
+        font-size: clamp(48px, 3.4vw, 60px);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+      }
+    }
     /* Contact — bottom-left on hero (above the fold) */
     .hero .hero-contact {
       position: absolute;
@@ -729,6 +739,9 @@
         if (!v) return;
         try { v.currentTime = 0; } catch (e) {}
         try {
+          /* iOS only autoplays when muted is set as a JS property, not just the HTML attribute. */
+          v.muted = true;
+          v.playsInline = true;
           var p = v.play();
           if (p && typeof p.catch === 'function') {
             p.catch(function() {
@@ -801,6 +814,15 @@
           schedule(dwellMs[order[idx]] || 3500);
         }
       }, 6000);
+
+      /* Low Power Mode / strict autoplay blocks muted autoplay; kick the active video on the first user gesture. */
+      function kickActive() {
+        var active = stage.querySelector('.sequence-layer.is-active video');
+        if (active) tryPlay(active);
+      }
+      ['touchstart', 'pointerdown', 'click'].forEach(function(evt) {
+        window.addEventListener(evt, kickActive, { once: true, passive: true });
+      });
     })();
 
     (function() {

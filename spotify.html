@@ -83,10 +83,12 @@
 
     /* Project Header */
     .project-header {
-      min-height: 70vh;
+      min-height: 56vh;
       display: flex;
       align-items: center;
-      padding: 0 40px;
+      /* Align the title to the centered 1600px content column on wide screens
+         (matches the meta) instead of letting it drift to the viewport edge. */
+      padding: 0 max(40px, calc((100vw - 1600px) / 2 + 40px));
       position: relative;
     }
     .project-header h1 {
@@ -100,7 +102,7 @@
     }
     .project-meta {
       position: absolute;
-      right: max(40px, calc((100vw - 1400px) / 2 + 40px));
+      right: max(40px, calc((100vw - 1600px) / 2 + 40px));
       top: 50%;
       transform: translateY(calc(-50% + 120px));
       display: flex;
@@ -125,7 +127,7 @@
 
     /* Content sections */
     .project-content {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
       padding: 0 40px 120px;
     }
@@ -157,7 +159,13 @@
       font-weight: 400;
     }
     .project-image.hero {
-      aspect-ratio: 16/10;
+      aspect-ratio: 21/9;
+    }
+    /* Image is 16/9; cover-fill the 16/10 box so no grey strip shows below it. */
+    .project-image.hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .project-image.full {
       aspect-ratio: 21/9;
@@ -211,9 +219,10 @@
       min-height: 5em;
     }
     .project-info-right {
-      justify-self: end;
-      width: 620px;
-      margin-right: 32px;
+      justify-self: stretch;
+      width: 100%;
+      max-width: none;
+      margin-right: 0;
     }
     .project-info-right h2 {
       font-size: clamp(28px, 4vw, 40px);
@@ -292,7 +301,7 @@
     /* Footer navigation */
     .project-footer {
       padding: 120px 40px 80px;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
     }
     .next-project {
@@ -323,7 +332,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 24px;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
     }
     footer a { text-decoration: underline; text-underline-offset: 4px; }
