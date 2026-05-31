@@ -563,6 +563,9 @@
       }
       function tryPlay(v) {
         try {
+          /* iOS only autoplays when muted is set as a JS property, not just the HTML attribute. */
+          v.muted = true;
+          v.playsInline = true;
           var p = v.play();
           if (p && typeof p.catch === 'function') {
             p.catch(function () {
