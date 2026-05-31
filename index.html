@@ -814,6 +814,15 @@
           schedule(dwellMs[order[idx]] || 3500);
         }
       }, 6000);
+
+      /* Low Power Mode / strict autoplay blocks muted autoplay; kick the active video on the first user gesture. */
+      function kickActive() {
+        var active = stage.querySelector('.sequence-layer.is-active video');
+        if (active) tryPlay(active);
+      }
+      ['touchstart', 'pointerdown', 'click'].forEach(function(evt) {
+        window.addEventListener(evt, kickActive, { once: true, passive: true });
+      });
     })();
 
     (function() {

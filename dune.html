@@ -594,6 +594,17 @@
         });
       }, { threshold: 0.25 });
       videos.forEach(function (v) { io.observe(v); });
+      /* Low Power Mode / strict autoplay blocks muted autoplay; start in-view videos on the first user gesture. */
+      function kickInView() {
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        videos.forEach(function (v) {
+          var r = v.getBoundingClientRect();
+          if (r.bottom > 0 && r.top < vh) tryPlay(v);
+        });
+      }
+      ['touchstart', 'pointerdown', 'click'].forEach(function (evt) {
+        window.addEventListener(evt, kickInView, { once: true, passive: true });
+      });
     })();
 
     window.addEventListener('pagehide', function (ev) {
