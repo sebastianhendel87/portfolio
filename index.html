@@ -336,7 +336,6 @@
         transition: none;
       }
     }
-    #selected-work .sequence-layer picture,
     #selected-work .sequence-layer img,
     #selected-work .sequence-layer video {
       width: 100%;
@@ -645,19 +644,13 @@
       <div class="sequence hp-animate" aria-label="Selected work sequence">
         <div class="sequence-stage">
           <div class="sequence-layer is-active" data-seq="dune">
-            <picture>
-              <source media="(min-width: 768px)" srcset="homepage/dune.webp" type="image/webp">
-              <img src="homepage/dune-still.jpg" alt="Dune selected work" decoding="async">
-            </picture>
+            <img src="homepage/dune-still.jpg" alt="Dune selected work" decoding="async" data-video="homepage/dune.mp4">
           </div>
           <div class="sequence-layer" data-seq="spotify">
             <img src="homepage/spotify-16x9.png" alt="Spotify selected work" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="carbo">
-            <picture>
-              <source media="(min-width: 768px)" srcset="homepage/carbo-culture-16x9.webp" type="image/webp">
-              <img src="homepage/carbo-culture-16x9-poster.jpg" alt="Carbo Culture selected work" decoding="async">
-            </picture>
+            <img src="homepage/carbo-culture-16x9-poster.jpg" alt="Carbo Culture selected work" decoding="async" data-video="homepage/carbo-culture-16x9.mp4">
           </div>
           <div class="sequence-layer" data-seq="tonscan">
             <img src="homepage/tonscan-16x9.png" alt="Tonscan selected work" decoding="async">
@@ -723,6 +716,26 @@
       if (!layers.length) return;
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      /* Desktop only: upgrade the static stills to the full-quality MP4s.
+         Mobile keeps the <img> still — no video download, reliable on iOS. */
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        layers.forEach(function(layer) {
+          var img = layer.querySelector('img[data-video]');
+          if (!img) return;
+          var v = document.createElement('video');
+          v.muted = true;
+          v.defaultMuted = true;
+          v.playsInline = true;
+          v.preload = 'auto';
+          v.setAttribute('muted', '');
+          v.setAttribute('playsinline', '');
+          v.poster = img.getAttribute('src');
+          v.src = img.getAttribute('data-video');
+          layer.insertBefore(v, img);
+          img.remove();
+        });
+      }
 
       var order = ['dune', 'spotify', 'carbo', 'tonscan'];
       // How long each layer stays in is-active (includes its CSS fade-in).
