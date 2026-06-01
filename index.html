@@ -336,6 +336,7 @@
         transition: none;
       }
     }
+    #selected-work .sequence-layer picture,
     #selected-work .sequence-layer img,
     #selected-work .sequence-layer video {
       width: 100%;
@@ -644,13 +645,19 @@
       <div class="sequence hp-animate" aria-label="Selected work sequence">
         <div class="sequence-stage">
           <div class="sequence-layer is-active" data-seq="dune">
-            <img src="homepage/dune.webp" alt="Dune selected work" decoding="async">
+            <picture>
+              <source media="(min-width: 768px)" srcset="homepage/dune.webp" type="image/webp">
+              <img src="homepage/dune-still.jpg" alt="Dune selected work" decoding="async">
+            </picture>
           </div>
           <div class="sequence-layer" data-seq="spotify">
             <img src="homepage/spotify-16x9.png" alt="Spotify selected work" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="carbo">
-            <img src="homepage/carbo-culture-16x9.webp" alt="Carbo Culture selected work" decoding="async">
+            <picture>
+              <source media="(min-width: 768px)" srcset="homepage/carbo-culture-16x9.webp" type="image/webp">
+              <img src="homepage/carbo-culture-16x9-poster.jpg" alt="Carbo Culture selected work" decoding="async">
+            </picture>
           </div>
           <div class="sequence-layer" data-seq="tonscan">
             <img src="homepage/tonscan-16x9.png" alt="Tonscan selected work" decoding="async">
