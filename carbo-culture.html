@@ -141,6 +141,27 @@
       object-position: center;
       display: block;
     }
+
+    /* Mobile-only stills: show static image instead of video at narrow widths. */
+    #carbo-hero-video .mobile-still,
+    #carbo-video-nature .mobile-still,
+    #carbo-video-live-action .mobile-still { display: none; }
+    .project-image.project-image--embed .mobile-still {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    @media (max-width: 768px) {
+      #carbo-hero-video video,
+      #carbo-video-nature video,
+      #carbo-video-live-action video { display: none; }
+      #carbo-hero-video .mobile-still,
+      #carbo-video-nature .mobile-still,
+      #carbo-video-live-action .mobile-still { display: block; }
+    }
     .project-meta-item {
       display: flex;
       flex-direction: column;
@@ -322,7 +343,10 @@
     }
     @media (max-width: 768px) {
       .project-info-module {
-        margin-bottom: 48px;
+        margin-bottom: 40px;
+      }
+      .project-image {
+        margin-bottom: 40px;
       }
     }
 
@@ -340,7 +364,8 @@
     @media (max-width: 768px) {
       .two-column {
         grid-template-columns: 1fr;
-        gap: 80px;
+        gap: 40px;
+        margin-bottom: 40px;
       }
     }
     .two-column .project-image img,
@@ -443,9 +468,6 @@
       .project-content {
         padding: 40px 20px 80px;
       }
-      .two-column {
-        gap: 40px;
-      }
       .project-footer {
         padding: 80px 20px 60px;
       }
@@ -493,6 +515,7 @@
 
     <div id="carbo-hero-video" class="project-image hero hero--video">
       <video src="carbo-culture/logo-bw.mp4" poster="carbo-culture/logo-bw-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+      <img class="mobile-still" src="carbo-culture/carboculture-logo.png" alt="Carbo Culture: logo">
     </div>
 
     <div class="project-info-module project-info-module--tight">
@@ -538,6 +561,7 @@
         autoplay muted loop playsinline
         preload="metadata"
         aria-label="Carbo Culture: live action (nature)"></video>
+      <img class="mobile-still" src="carbo-culture/carboculture-nature-finland-3.jpg" alt="Carbo Culture: nature (Finland)">
     </div>
 
     <div class="project-image">
@@ -555,6 +579,7 @@
           autoplay muted loop playsinline
           preload="metadata"
           aria-label="Carbo Culture: live action"></video>
+        <img class="mobile-still" src="carbo-culture/carboculture-kerava-2.jpg" alt="Carbo Culture: Kerava facility">
       </div>
     </div>
 
@@ -582,6 +607,15 @@
     /* Play videos on viewport intersect so Safari / iOS / low-power mode don't leave them paused as black rectangles. */
     (function () {
       if (!('IntersectionObserver' in window)) return;
+      /* Mobile shows static stills; drop the video sources so they never download. */
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.querySelectorAll('#carbo-hero-video video, #carbo-video-nature video, #carbo-video-live-action video').forEach(function (v) {
+          v.pause();
+          v.removeAttribute('src');
+          v.load();
+        });
+        return;
+      }
       var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
       if (!videos.length) return;
