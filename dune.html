@@ -200,6 +200,29 @@
       display: block;
     }
 
+    /* Mobile stills: hidden on desktop, swapped in for videos at <=768px */
+    #dune-hero-logo .mobile-still,
+    #dune-embed-01 .mobile-still,
+    #dune-embed-02 .mobile-still,
+    #dune-embed-03 .mobile-still,
+    #dune-embed-04 .mobile-still,
+    #dune-embed-seq03 .mobile-still {
+      display: none;
+    }
+    #dune-hero-logo .mobile-still,
+    #dune-embed-01 .mobile-still,
+    #dune-embed-02 .mobile-still,
+    #dune-embed-03 .mobile-still,
+    #dune-embed-04 .mobile-still,
+    #dune-embed-seq03 .mobile-still {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
     /* Project info module — same structure as carbo-culture.html */
     .project-info-module {
       display: grid;
@@ -447,6 +470,22 @@
       .two-column {
         gap: 40px;
       }
+      #dune-hero-logo video,
+      #dune-embed-01 video,
+      #dune-embed-02 video,
+      #dune-embed-03 video,
+      #dune-embed-04 video,
+      #dune-embed-seq03 video {
+        display: none;
+      }
+      #dune-hero-logo .mobile-still,
+      #dune-embed-01 .mobile-still,
+      #dune-embed-02 .mobile-still,
+      #dune-embed-03 .mobile-still,
+      #dune-embed-04 .mobile-still,
+      #dune-embed-seq03 .mobile-still {
+        display: block;
+      }
       .project-footer {
         padding: 80px 20px 60px;
       }
@@ -487,6 +526,7 @@
 
     <div id="dune-hero-logo" class="project-image hero hero--video">
       <video src="dune/logo-reveal-dark.mp4" poster="dune/logo-reveal-dark-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Dune logo reveal"></video>
+      <img class="mobile-still" src="dune/logo-reveal-dark-still.png" alt="Dune logo reveal">
     </div>
 
     <div class="project-info-module project-info-module--tight">
@@ -517,25 +557,30 @@
     </div>
 
     <div class="two-column">
-      <div class="project-image project-image--embed">
+      <div id="dune-embed-01" class="project-image project-image--embed">
         <video src="dune/dune-01.mp4" poster="dune/dune-01-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Dune clip 1"></video>
+        <img class="mobile-still" src="dune/dune-01-still.jpg" alt="Dune clip 1">
       </div>
-      <div class="project-image project-image--embed">
+      <div id="dune-embed-02" class="project-image project-image--embed">
         <video src="dune/dune-02.mp4" poster="dune/dune-02-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Dune clip 2"></video>
+        <img class="mobile-still" src="dune/dune-02-still.jpg" alt="Dune clip 2">
       </div>
     </div>
 
     <div class="two-column">
-      <div class="project-image project-image--embed">
+      <div id="dune-embed-03" class="project-image project-image--embed">
         <video src="dune/dune-03.mp4" poster="dune/dune-03-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Dune clip 3"></video>
+        <img class="mobile-still" src="dune/dune-03-still.jpg" alt="Dune clip 3">
       </div>
-      <div class="project-image project-image--embed">
+      <div id="dune-embed-04" class="project-image project-image--embed">
         <video src="dune/dune-04.mp4" poster="dune/dune-04-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Dune clip 4"></video>
+        <img class="mobile-still" src="dune/dune-04-still.jpg" alt="Dune clip 4">
       </div>
     </div>
 
-    <div class="project-image project-image--embed">
+    <div id="dune-embed-seq03" class="project-image project-image--embed">
       <video src="dune/seq-03.mp4" poster="dune/seq-03-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Dune clip 5"></video>
+      <img class="mobile-still" src="dune/seq-03-still.png" alt="Dune clip 5">
     </div>
 
   </main>
@@ -553,6 +598,16 @@
   <script>
     /* Play videos on viewport intersect so Safari / iOS / low-power mode don't leave them paused as black rectangles. */
     (function () {
+      /* On mobile we serve static stills instead of the videos, so strip their
+         src to avoid pointless downloads and leave the rest of the work to CSS. */
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.querySelectorAll('#dune-hero-logo video, #dune-embed-01 video, #dune-embed-02 video, #dune-embed-03 video, #dune-embed-04 video, #dune-embed-seq03 video').forEach(function (v) {
+          v.pause();
+          v.removeAttribute('src');
+          v.load();
+        });
+        return;
+      }
       if (!('IntersectionObserver' in window)) return;
       var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
