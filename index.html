@@ -352,6 +352,10 @@
     #selected-work .sequence-layer video {
       background: #000;
     }
+    /* Mobile-only brand logo tiles: hidden on desktop (videos play instead) */
+    #selected-work .sequence-layer .seq-logo-mobile {
+      display: none;
+    }
     /* No black overlay; cross-fade only (prevents flicker) */
 
     /* About — one grid so “Skills” lines up with the list column at all widths */
@@ -439,6 +443,14 @@
 
     /* Mobile optimizations */
     @media (max-width: 768px) {
+      /* Mobile: brand logo tiles replace the unreliable video/poster stills */
+      #selected-work .sequence-layer img:not(.seq-logo-mobile),
+      #selected-work .sequence-layer video {
+        display: none;
+      }
+      #selected-work .sequence-layer .seq-logo-mobile {
+        display: block;
+      }
       .navbar {
         padding: 20px 20px;
       }
@@ -645,15 +657,19 @@
         <div class="sequence-stage">
           <div class="sequence-layer is-active" data-seq="dune">
             <img src="homepage/dune-still.jpg" alt="Dune selected work" decoding="async" data-video="homepage/dune.mp4">
+            <img class="seq-logo-mobile" src="homepage/dune-logo.png" alt="Dune" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="spotify">
             <img src="homepage/spotify-16x9.png" alt="Spotify selected work" decoding="async">
+            <img class="seq-logo-mobile" src="homepage/spotify-logo.png" alt="Spotify" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="carbo">
             <img src="homepage/carbo-culture-16x9-poster.jpg" alt="Carbo Culture selected work" decoding="async" data-video="homepage/carbo-culture-16x9.mp4">
+            <img class="seq-logo-mobile" src="homepage/carbo-logo.png" alt="Carbo Culture" decoding="async">
           </div>
           <div class="sequence-layer" data-seq="tonscan">
             <img src="homepage/tonscan-16x9.png" alt="Tonscan selected work" decoding="async">
+            <img class="seq-logo-mobile" src="homepage/tonscan-logo.png" alt="Tonscan" decoding="async">
           </div>
         </div>
       </div>
