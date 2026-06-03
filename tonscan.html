@@ -289,6 +289,13 @@
       backface-visibility: hidden;
     }
 
+    /* Mobile-only stills: show video poster instead of video at narrow widths. */
+    .media-tile--video .mobile-still { display: none; }
+    @media (max-width: 768px) {
+      .media-tile--video video { display: none; }
+      .media-tile--video .mobile-still { display: block; }
+    }
+
     /* Project info module — igual que spotify.html */
     .project-info-module {
       display: grid;
@@ -549,11 +556,13 @@
       <div class="media-tile media-tile--video">
         <div class="media-tile__inner">
           <video src="tonscan/tonscan-video-1.mp4" poster="tonscan/tonscan-video-1-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+          <img class="mobile-still" src="tonscan/tonscan-video-1-poster.jpg" alt="Tonscan: video 1">
         </div>
       </div>
       <div class="media-tile media-tile--video">
         <div class="media-tile__inner">
           <video src="tonscan/tonscan-video-2.mp4" poster="tonscan/tonscan-video-2-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+          <img class="mobile-still" src="tonscan/tonscan-video-2-poster.jpg" alt="Tonscan: video 2">
         </div>
       </div>
     </div>
@@ -578,6 +587,15 @@
     /* Play videos on viewport intersect so Safari / iOS / low-power mode don't leave them paused as black rectangles. */
     (function () {
       if (!('IntersectionObserver' in window)) return;
+      /* Mobile shows static poster stills; drop the video sources so they never download. */
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.querySelectorAll('.media-tile--video video').forEach(function (v) {
+          v.pause();
+          v.removeAttribute('src');
+          v.load();
+        });
+        return;
+      }
       var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
       if (!videos.length) return;
