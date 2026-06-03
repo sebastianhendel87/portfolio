@@ -356,6 +356,10 @@
     #selected-work .sequence-layer .seq-logo-mobile {
       display: none;
     }
+    /* Mobile-only carousel nav dots (hidden on desktop) */
+    #selected-work .sequence-dots {
+      display: none;
+    }
     /* No black overlay; cross-fade only (prevents flicker) */
 
     /* About — one grid so “Skills” lines up with the list column at all widths */
@@ -450,6 +454,31 @@
       }
       #selected-work .sequence-layer .seq-logo-mobile {
         display: block;
+      }
+      #selected-work .sequence-stage {
+        cursor: pointer;
+      }
+      #selected-work .sequence-dots {
+        display: flex;
+        justify-content: center;
+        gap: 9px;
+        margin-top: 14px;
+      }
+      #selected-work .sequence-dot {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 7px;
+        height: 7px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.22);
+        cursor: pointer;
+        transition: background 200ms ease, transform 200ms ease;
+      }
+      #selected-work .sequence-dot[aria-current="true"] {
+        background: rgba(0, 0, 0, 0.78);
+        transform: scale(1.2);
       }
       .navbar {
         padding: 20px 20px;
@@ -731,11 +760,12 @@
       var layers = Array.prototype.slice.call(stage.querySelectorAll('.sequence-layer'));
       if (!layers.length) return;
 
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       /* Desktop only: upgrade the static stills to the full-quality MP4s.
-         Mobile keeps the <img> still — no video download, reliable on iOS. */
-      if (window.matchMedia('(min-width: 768px)').matches) {
+         Mobile keeps the <img> still — no video download, reliable on iOS.
+         Skipped under reduced-motion so nothing autoplays. */
+      if (!reduceMotion && window.matchMedia('(min-width: 768px)').matches) {
         layers.forEach(function(layer) {
           var img = layer.querySelector('img[data-video]');
           if (!img) return;
@@ -810,12 +840,52 @@
           if (!sectionInView) return;
           idx = (idx + 1) % order.length;
           setActive(order[idx]);
+          updateDots();
           schedule(dwellMs[order[idx]] || 3500);
         }, ms);
       }
 
       // Bootstrap: the first layer already has is-active in HTML; just kick its video.
       setActive(order[0]);
+
+      // Mobile: tappable nav dots + tap-anywhere to advance, so the sequence can
+      // always be moved by hand and never appears "stuck" (e.g. under reduced-motion).
+      var dotsWrap = document.createElement('div');
+      dotsWrap.className = 'sequence-dots';
+      order.forEach(function(key, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sequence-dot';
+        b.setAttribute('aria-label', 'Show ' + key);
+        b.addEventListener('click', function() { goTo(i); });
+        dotsWrap.appendChild(b);
+      });
+      var seqEl = root.querySelector('.sequence');
+      if (seqEl && seqEl.parentNode) {
+        seqEl.parentNode.insertBefore(dotsWrap, seqEl.nextSibling);
+      } else {
+        stage.appendChild(dotsWrap);
+      }
+      updateDots();
+
+      function updateDots() {
+        Array.prototype.forEach.call(dotsWrap.children, function(d, i) {
+          d.setAttribute('aria-current', i === idx ? 'true' : 'false');
+        });
+      }
+      function goTo(i) {
+        idx = (i + order.length) % order.length;
+        setActive(order[idx]);
+        updateDots();
+        if (!reduceMotion) schedule(dwellMs[order[idx]] || 3500);
+      }
+      stage.addEventListener('click', function() {
+        if (window.matchMedia('(max-width: 768px)').matches) goTo(idx + 1);
+      });
+
+      // Respect reduced-motion: no auto-advance or autoplaying video.
+      // The dots and tap-to-advance above still work.
+      if (reduceMotion) return;
 
       var section = document.querySelector('#selected-work');
       if (!('IntersectionObserver' in window) || !section) {
