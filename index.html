@@ -684,11 +684,7 @@
       <h2 class="hp-animate hp-section-heading">Selected work</h2>
       <div class="sequence hp-animate" aria-label="Selected work sequence">
         <div class="sequence-stage">
-          <div class="sequence-layer is-active" data-seq="dune">
-            <img src="homepage/dune-still.jpg" alt="Dune selected work" decoding="async" data-video="homepage/dune.mp4">
-            <img class="seq-logo-mobile" src="homepage/dune-logo.png" alt="Dune" decoding="async">
-          </div>
-          <div class="sequence-layer" data-seq="spotify">
+          <div class="sequence-layer is-active" data-seq="spotify">
             <img src="homepage/spotify-16x9.png" alt="Spotify selected work" decoding="async">
             <img class="seq-logo-mobile" src="homepage/spotify-logo.png" alt="Spotify" decoding="async">
           </div>
@@ -699,6 +695,10 @@
           <div class="sequence-layer" data-seq="tonscan">
             <img src="homepage/tonscan-16x9.png" alt="Tonscan selected work" decoding="async">
             <img class="seq-logo-mobile" src="homepage/tonscan-logo.png" alt="Tonscan" decoding="async">
+          </div>
+          <div class="sequence-layer" data-seq="dune">
+            <img src="homepage/dune-still.jpg" alt="Dune selected work" decoding="async" data-video="homepage/dune.mp4">
+            <img class="seq-logo-mobile" src="homepage/dune-logo.png" alt="Dune" decoding="async">
           </div>
         </div>
       </div>
@@ -783,7 +783,7 @@
         });
       }
 
-      var order = ['dune', 'spotify', 'carbo', 'tonscan'];
+      var order = ['spotify', 'carbo', 'tonscan', 'dune'];
       // How long each layer stays in is-active (includes its CSS fade-in).
       // Videos: slightly less than their duration so the next fade starts
       // before the visible tail; stills: short and snappy.
